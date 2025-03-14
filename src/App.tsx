@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { 
   BarChart3, 
   PieChart, 
@@ -8,7 +8,7 @@ import {
   Target, 
   Zap, 
   CheckCircle, 
-  ChevronRight, 
+//  ChevronRight, 
   Mail, 
   Phone, 
   MapPin, 
@@ -50,9 +50,6 @@ function App() {
               Nossa plataforma de análise de dados oferece insights para impulsionar o crescimento do seu negócio.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
-                Começar Agora
-              </button>
               <button className="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors">
                 Saiba Mais
               </button>
