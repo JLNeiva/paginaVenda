@@ -1,39 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { 
   LayoutDashboard, 
   TrendingUp, 
-  Target, 
-  DollarSign,
   User,
   LogOut
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const dashboards = [
-  {
-    id: 1,
-    title: "Análise de Vendas 2023",
-    icon: TrendingUp,
-  },
-  {
-    id: 2,
-    title: "KPIs Operacionais",
-    icon: Target,
-  },
-  {
-    id: 3,
-    title: "Resultados Financeiros",
-    icon: DollarSign,
-  }
-];
-
 export function Dashboard() {
   const navigate = useNavigate();
-  const [user, setUser] = React.useState<any>(null);
-  const [selectedDashboard, setSelectedDashboard] = React.useState(1);
+  const [user, setUser] = useState<any>(null);
+  const [dashboards, setDashboards] = useState<any[]>([]);
+  const [selectedDashboard, setSelectedDashboard] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
@@ -41,14 +22,37 @@ export function Dashboard() {
     getUser();
   }, []);
 
+  useEffect(() => {
+    const fetchDashboards = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('dashboard')
+          .select('id, nome, url')
+          .eq('user', user.id);
+
+        if (error) {
+          console.error('Erro ao buscar dashboards:', error);
+        } else {
+          const dashboardsData = data.map((item: any) => ({
+            id: item.id,
+            title: item.nome,
+            url: item.url,
+            icon: TrendingUp, // Você pode ajustar o ícone conforme necessário
+          }));
+          setDashboards(dashboardsData);
+          if (dashboardsData.length > 0) {
+            setSelectedDashboard(dashboardsData[0].url);
+          }
+        }
+      }
+    };
+
+    fetchDashboards();
+  }, [user]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate('/');
-  };
-
-  // Exemplo de URL de dashboard público do Tableau
-  const getDashboardUrl = (id: number) => {
-    return "https://public.tableau.com/views/SuperstoreSales_24/Overview?:showVizHome=no&:embed=true";
   };
 
   return (
@@ -90,15 +94,15 @@ export function Dashboard() {
               {dashboards.map((dashboard) => (
                 <li key={dashboard.id}>
                   <button 
-                    onClick={() => setSelectedDashboard(dashboard.id)}
+                    onClick={() => setSelectedDashboard(dashboard.url)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      selectedDashboard === dashboard.id 
+                      selectedDashboard === dashboard.url 
                         ? 'bg-blue-50 text-blue-700' 
                         : 'hover:bg-gray-100'
                     }`}
                   >
                     <dashboard.icon className={`h-5 w-5 ${
-                      selectedDashboard === dashboard.id 
+                      selectedDashboard === dashboard.url 
                         ? 'text-blue-700' 
                         : 'text-blue-600'
                     }`} />
@@ -113,14 +117,16 @@ export function Dashboard() {
         {/* Main Content */}
         <main className="flex-1 p-8">
           <div className="w-[85%] h-[80vh] mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-            <iframe
-              src={getDashboardUrl(selectedDashboard)}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              allowFullScreen
-              className="w-full h-full"
-            />
+            {selectedDashboard && (
+              <iframe
+                src={selectedDashboard}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            )}
           </div>
         </main>
       </div>

@@ -395,10 +395,12 @@ function App() {
                     }).then(response => {
                       if (response.ok) {
                         exibirMensagem("Formulário enviado com sucesso!", "#ADD8E6");
+                        form.reset(); // Limpa os dados do formulário
                       } else {
                         exibirMensagem("Erro ao enviar o formulário", "#FFB6C1");
                       }
                     }).catch(error => {
+                      console.error('Erro ao enviar o formulário:', error);
                       exibirMensagem("Erro ao enviar o formulário", "#FFB6C1");
                     });
                   }}
