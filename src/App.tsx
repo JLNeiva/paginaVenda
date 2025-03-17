@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import { 
   BarChart3, 
   PieChart, 
@@ -8,7 +8,7 @@ import {
   Target, 
   Zap, 
   CheckCircle, 
-//  ChevronRight, 
+  ChevronRight, 
   Mail, 
   Phone, 
   MapPin, 
@@ -17,6 +17,7 @@ import {
   Instagram, 
   Facebook 
 } from 'lucide-react';
+import { AuthButton } from './components/AuthButton';
 
 function App() {
   return (
@@ -26,16 +27,14 @@ function App() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <BarChart3 className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
+            <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
           </div>
           <nav className="hidden md:flex space-x-8">
             <a href="#beneficios" className="text-gray-600 hover:text-blue-600 font-medium">Benefícios</a>
             <a href="#casos" className="text-gray-600 hover:text-blue-600 font-medium">Casos de Uso</a>
             <a href="#contato" className="text-gray-600 hover:text-blue-600 font-medium">Contato</a>
           </nav>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors">
-            Agendar Demo
-          </button>
+          <AuthButton />
         </div>
       </header>
 
@@ -47,9 +46,12 @@ function App() {
               Transforme dados em decisões estratégicas
             </h1>
             <p className="text-xl mb-8">
-              Nossa plataforma de análise de dados oferece insights para impulsionar o crescimento do seu negócio.
+              Nossa plataforma de análise de dados oferece insights em tempo real para impulsionar o crescimento do seu negócio.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
+                Começar Agora
+              </button>
               <button className="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors">
                 Saiba Mais
               </button>
@@ -120,7 +122,7 @@ function App() {
               <Target className="h-12 w-12 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-3">Visualização Clara de KPIs</h3>
               <p className="text-gray-600">
-                Monitore seus indicadores-chave com dashboards personalizados e intuitivos.
+                Monitore seus indicadores-chave em tempo real com dashboards personalizados e intuitivos.
               </p>
             </div>
             
@@ -251,7 +253,7 @@ function App() {
               <div className="md:w-2/3">
                 <h3 className="text-xl font-bold mb-3">Operações e Logística</h3>
                 <p className="text-gray-600 mb-4">
-                  Otimize processos, monitore a cadeia de suprimentos e identifique gargalos operacionais com painéis de controle.
+                  Otimize processos, monitore a cadeia de suprimentos e identifique gargalos operacionais com painéis de controle em tempo real.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-start">
@@ -312,6 +314,7 @@ function App() {
         </div>
       </section>
 
+     
       {/* Formulário de Contato */}
       <section id="contato" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -326,7 +329,7 @@ function App() {
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 mr-3 flex-shrink-0" />
-                    <span>contato@dashvision.com.br</span>
+                    <span>contato@datavision.com.br</span>
                   </div>
                   <div className="flex items-start">
                     <Phone className="h-6 w-6 mr-3 flex-shrink-0" />
@@ -340,7 +343,64 @@ function App() {
               </div>
               
               <div className="md:w-1/2 p-8 md:p-12">
-                <form className="space-y-6">
+                <form 
+                  className="space-y-6" 
+                  action="#" 
+                  method="POST"
+                  onSubmit={(e) => {
+
+                    e.preventDefault();
+                    
+                    //meu codigo
+                    const exibirMensagem = (mensagem: string, cor: string) => {
+                      const mensagemDiv = document.createElement("div");
+                      mensagemDiv.innerText = mensagem;
+                      mensagemDiv.style.position = "fixed";
+                      mensagemDiv.style.top = "20px";
+                      mensagemDiv.style.left = "50%";
+                      mensagemDiv.style.transform = "translateX(-50%)";
+                      mensagemDiv.style.background = cor;
+                      mensagemDiv.style.color = "#555";
+                      mensagemDiv.style.padding = "10px 20px";
+                      mensagemDiv.style.borderRadius = "5px";
+                      mensagemDiv.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
+                      mensagemDiv.style.zIndex = "9999"; // Garante que fica acima de outros elementos
+                      mensagemDiv.style.fontSize = "16px"; // Ajusta a fonte para melhor visualização
+                      mensagemDiv.style.fontWeight = "bold";
+                      mensagemDiv.style.textAlign = "center";
+                      mensagemDiv.style.minWidth = "200px"; // Define uma largura mínima
+                      mensagemDiv.style.maxWidth = "90%"; // Evita que ultrapasse a tela
+                      mensagemDiv.style.padding = "15px"; // Melhora o espaçamento interno
+                      
+                      document.body.appendChild(mensagemDiv);
+                    
+                      setTimeout(() => mensagemDiv.remove(), 3000);
+                    };
+                    
+                    //http://localhost:5678/webhook-test/a1b099a3-bce7-46d3-8c89-9dc41cf13cfa
+                    //https://webhook.site/{your-webhook-id}
+                    fetch('http://localhost:5678/webhook-test/a1b099a3-bce7-46d3-8c89-9dc41cf13cfa', { // Substitua {your-webhook-id} pelo ID do seu webhook
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        nome: e.target.nome.value,
+                        email: e.target.email.value,
+                        telefone: e.target.telefone.value,
+                        empresa: e.target.empresa.value,
+                      }),
+                    }).then(response => {
+                      if (response.ok) {
+                        exibirMensagem("Formulário enviado com sucesso!","#ADD8E6");
+                      } else {
+                        exibirMensagem("Erro ao enviar o formulário","#FFB6C1");
+                      }
+                    }).catch(error => {
+                      exibirMensagem("Erro ao enviar o formulário","#FFB6C1");
+                    });
+                  }}
+                >
                   <div>
                     <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-1">
                       Nome Completo *
@@ -348,6 +408,7 @@ function App() {
                     <input 
                       type="text" 
                       id="nome" 
+                      name="nome"
                       required 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Seu nome completo"
@@ -361,6 +422,7 @@ function App() {
                     <input 
                       type="email" 
                       id="email" 
+                      name="email"
                       required 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                       placeholder="seu.email@empresa.com.br"
@@ -374,6 +436,7 @@ function App() {
                     <input 
                       type="tel" 
                       id="telefone" 
+                      name="telefone"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                       placeholder="(00) 00000-0000"
                     />
@@ -386,6 +449,7 @@ function App() {
                     <input 
                       type="text" 
                       id="empresa" 
+                      name="empresa"
                       required 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Nome da sua empresa"
@@ -439,7 +503,7 @@ function App() {
             <div>
               <div className="flex items-center mb-4">
                 <BarChart3 className="h-8 w-8 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">DashVision</span>
+                <span className="ml-2 text-xl font-bold">DataVision</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Transformando dados em decisões estratégicas desde 2018.
@@ -492,7 +556,7 @@ function App() {
           </div>
           
           <div className="pt-8 border-t border-gray-700 text-center text-gray-400">
-            <p>&copy; 2025 DashVision. Todos os direitos reservados.</p>
+            <p>&copy; 2025 DataVision. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
