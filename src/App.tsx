@@ -29,7 +29,7 @@ function App() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <LayoutDashboard className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
+            <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
           <nav className="hidden md:flex space-x-8">
             <a href="#beneficios" className="text-gray-600 hover:text-blue-600 font-medium">Benefícios</a>
@@ -331,7 +331,7 @@ function App() {
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 mr-3 flex-shrink-0" />
-                    <span>contato@datavision.com.br</span>
+                    <span>contato@dashvision.com.br</span>
                   </div>
                   <div className="flex items-start">
                     <Phone className="h-6 w-6 mr-3 flex-shrink-0" />
@@ -508,8 +508,8 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center mb-4">
-                <BarChart3 className="h-8 w-8 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">DataVision</span>
+                <LayoutDashboard className="h-8 w-8 text-blue-400" />
+                <span className="ml-2 text-xl font-bold">DashVision</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Transformando dados em decisões estratégicas desde 2018.
@@ -562,7 +562,7 @@ function App() {
           </div>
           
           <div className="pt-8 border-t border-gray-700 text-center text-gray-400">
-            <p>&copy; 2025 DataVision. Todos os direitos reservados.</p>
+            <p>&copy; 2025 DashVision. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

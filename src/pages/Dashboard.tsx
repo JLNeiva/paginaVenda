@@ -65,7 +65,7 @@ export function Dashboard() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <LayoutDashboard className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
+            <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
           <div className="flex items-center space-x-4">
             {isAdmin && (
