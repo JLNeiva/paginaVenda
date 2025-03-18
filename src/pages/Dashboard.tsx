@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { 
   LayoutDashboard, 
-  TrendingUp, 
+  TrendingUp,
+  Target, 
+  DollarSign,
   User,
-  LogOut
+  LogOut,
+  Settings
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -65,6 +68,13 @@ export function Dashboard() {
             <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
           </div>
           <div className="flex items-center space-x-4">
+             <Link
+               to="/settings"
+               className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+               aria-label="Settings"
+             >
+               <Settings className="h-5 w-5" />
+             </Link>
             <div className="flex items-center">
               <User className="h-5 w-5 text-gray-500 mr-2" />
               <span className="text-sm text-gray-600">
