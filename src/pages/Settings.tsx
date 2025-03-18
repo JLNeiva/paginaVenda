@@ -8,7 +8,6 @@ import {
   Plus,
   Loader2,
   AlertCircle,
-  CheckCircle,
   X
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -17,19 +16,19 @@ import toast, { Toaster } from 'react-hot-toast';
 
 interface Dashboard {
   id: string;
-  name: string;
+  nome: string;
   url: string;
-  active: boolean;
-  user_id: string;
+  ativo: boolean;
+  email: string;
   created_at: string;
   updated_at: string;
-  user_email?: string;
 }
 
 interface FormData {
-  name: string;
+  nome: string;
   url: string;
-  active: boolean;
+  ativo: boolean;
+  email: string;
 }
 
 export function Settings() {
@@ -39,9 +38,10 @@ export function Settings() {
   const [showForm, setShowForm] = useState(false);
   const [editingDashboard, setEditingDashboard] = useState<Dashboard | null>(null);
   const [formData, setFormData] = useState<FormData>({
-    name: '',
+    nome: '',
     url: '',
-    active: true,
+    ativo: true,
+    email: '',
   });
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
@@ -59,20 +59,12 @@ export function Settings() {
 
       const { data, error } = await supabase
         .from('dashboard')
-        .select(`
-          *,
-          profiles:user_id (
-            email
-          )
-        `)
-        .order('name');
+        .select('*')
+        .order('email');
 
       if (error) throw error;
 
-      setDashboards(data.map(d => ({
-        ...d,
-        user_email: d.profiles?.email
-      })));
+      setDashboards(data);
     } catch (error: any) {
       toast.error('Erro ao carregar dashboards: ' + error.message);
     } finally {
@@ -90,12 +82,16 @@ export function Settings() {
   };
 
   const validateForm = () => {
-    if (!formData.name.trim()) {
+    if (!formData.nome.trim()) {
       toast.error('Nome é obrigatório');
       return false;
     }
     if (!formData.url.trim() || !validateUrl(formData.url)) {
       toast.error('URL válida é obrigatória');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      toast.error('Email é obrigatório');
       return false;
     }
     return true;
@@ -116,7 +112,7 @@ export function Settings() {
 
       const dashboardData = {
         ...formData,
-        user_id: user.id,
+        email: user.email,
       };
 
       let error;
@@ -136,7 +132,7 @@ export function Settings() {
       toast.success(`Dashboard ${editingDashboard ? 'atualizado' : 'criado'} com sucesso`);
       setShowForm(false);
       setEditingDashboard(null);
-      setFormData({ name: '', url: '', active: true });
+      setFormData({ nome: '', url: '', ativo: true, email: '' });
       fetchDashboards();
     } catch (error: any) {
       toast.error('Erro ao salvar dashboard: ' + error.message);
@@ -148,9 +144,10 @@ export function Settings() {
   const handleEdit = (dashboard: Dashboard) => {
     setEditingDashboard(dashboard);
     setFormData({
-      name: dashboard.name,
+      nome: dashboard.nome,
       url: dashboard.url,
-      active: dashboard.active,
+      ativo: dashboard.ativo,
+      email: dashboard.email,
     });
     setShowForm(true);
   };
@@ -197,7 +194,7 @@ export function Settings() {
             <button
               onClick={() => {
                 setEditingDashboard(null);
-                setFormData({ name: '', url: '', active: true });
+                setFormData({ nome: '', url: '', ativo: true, email: '' });
                 setShowForm(true);
               }}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
@@ -214,38 +211,39 @@ export function Settings() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full table-fixed">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Criado em</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuário</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                    <th className="w-2/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Criado em</th>
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="w-1/6 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {dashboards.map((dashboard) => (
                     <tr key={dashboard.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{dashboard.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <a href={dashboard.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      <td className="px-6 py-4 whitespace-nowrap">{dashboard.nome}</td>
+                      <td className="px-6 py-4 whitespace-normal break-words max-w-sm">
+                        <a href={dashboard.url} target="_blank" rel="noopener noreferrer" 
+                          className="text-blue-600 hover:underline break-all">
                           {dashboard.url}
                         </a>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          dashboard.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                          dashboard.ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          {dashboard.active ? 'Ativo' : 'Inativo'}
+                          {dashboard.ativo ? 'Ativo' : 'Inativo'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {format(new Date(dashboard.created_at), 'PPP', { locale: ptBR })}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {dashboard.user_email}
+                        {dashboard.email}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
@@ -291,15 +289,15 @@ export function Settings() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
                     Nome *
                   </label>
                   <input
                     type="text"
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    id="nome"
+                    value={formData.nome}
+                    onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
                     required
                   />
                 </div>
@@ -313,7 +311,21 @@ export function Settings() {
                     id="url"
                     value={formData.url}
                     onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
                     required
                   />
                 </div>
@@ -321,12 +333,12 @@ export function Settings() {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
-                    id="active"
-                    checked={formData.active}
-                    onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                    id="ativo"
+                    checked={formData.ativo}
+                    onChange={(e) => setFormData({ ...formData, ativo: e.target.checked })}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="active" className="ml-2 block text-sm text-gray-900">
+                  <label htmlFor="ativo" className="ml-2 block text-sm text-gray-900">
                     Ativo
                   </label>
                 </div>

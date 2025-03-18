@@ -3,13 +3,11 @@ import { supabase } from '../lib/supabase';
 import { 
   LayoutDashboard, 
   TrendingUp,
-  Target, 
-  DollarSign,
   User,
   LogOut,
   Settings
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -31,7 +29,7 @@ export function Dashboard() {
         const { data, error } = await supabase
           .from('dashboard')
           .select('id, nome, url')
-          .eq('user', user.id);
+          .eq('email', user.email);
 
         if (error) {
           console.error('Erro ao buscar dashboards:', error);
@@ -68,13 +66,13 @@ export function Dashboard() {
             <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
           </div>
           <div className="flex items-center space-x-4">
-             <Link
-               to="/settings"
-               className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
-               aria-label="Settings"
-             >
-               <Settings className="h-5 w-5" />
-             </Link>
+            <Link
+              to="/settings"
+              className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+              aria-label="Settings"
+            >
+              <Settings className="h-5 w-5" />
+            </Link>
             <div className="flex items-center">
               <User className="h-5 w-5 text-gray-500 mr-2" />
               <span className="text-sm text-gray-600">
