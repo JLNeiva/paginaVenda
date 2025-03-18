@@ -8,7 +8,7 @@ import {
   Target, 
   Zap, 
   CheckCircle, 
-//  ChevronRight, 
+  ChevronRight, 
   Mail, 
   Phone, 
   MapPin, 
@@ -348,14 +348,10 @@ function App() {
                   action="#" 
                   method="POST"
                   onSubmit={(e) => {
+
                     e.preventDefault();
                     
-                    const form = e.target as HTMLFormElement;
-                    const nome = (form.elements.namedItem('nome') as HTMLInputElement).value;
-                    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-                    const telefone = (form.elements.namedItem('telefone') as HTMLInputElement).value;
-                    const empresa = (form.elements.namedItem('empresa') as HTMLInputElement).value;
-
+                    //meu codigo
                     const exibirMensagem = (mensagem: string, cor: string) => {
                       const mensagemDiv = document.createElement("div");
                       mensagemDiv.innerText = mensagem;
@@ -381,27 +377,27 @@ function App() {
                       setTimeout(() => mensagemDiv.remove(), 3000);
                     };
                     
+                    //http://localhost:5678/webhook-test/a1b099a3-bce7-46d3-8c89-9dc41cf13cfa
+                    //https://webhook.site/{your-webhook-id}
                     fetch('http://localhost:5678/webhook-test/a1b099a3-bce7-46d3-8c89-9dc41cf13cfa', { // Substitua {your-webhook-id} pelo ID do seu webhook
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
                       },
                       body: JSON.stringify({
-                        nome: nome,
-                        email: email,
-                        telefone: telefone,
-                        empresa: empresa,
+                        nome: e.target.nome.value,
+                        email: e.target.email.value,
+                        telefone: e.target.telefone.value,
+                        empresa: e.target.empresa.value,
                       }),
                     }).then(response => {
                       if (response.ok) {
-                        exibirMensagem("Formulário enviado com sucesso!", "#ADD8E6");
-                        form.reset(); // Limpa os dados do formulário
+                        exibirMensagem("Formulário enviado com sucesso!","#ADD8E6");
                       } else {
-                        exibirMensagem("Erro ao enviar o formulário", "#FFB6C1");
+                        exibirMensagem("Erro ao enviar o formulário","#FFB6C1");
                       }
                     }).catch(error => {
-                      console.error('Erro ao enviar o formulário:', error);
-                      exibirMensagem("Erro ao enviar o formulário", "#FFB6C1");
+                      exibirMensagem("Erro ao enviar o formulário","#FFB6C1");
                     });
                   }}
                 >

@@ -1,20 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { supabase } from '../lib/supabase';
 import { 
   LayoutDashboard, 
   TrendingUp, 
+  Target, 
+  DollarSign,
   User,
-  LogOut
+  LogOut,
+  Settings
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
+const dashboards = [
+  {
+    id: 1,
+    title: "Análise de Vendas 2023",
+    icon: TrendingUp,
+  },
+  {
+    id: 2,
+    title: "KPIs Operacionais",
+    icon: Target,
+  },
+  {
+    id: 3,
+    title: "Resultados Financeiros",
+    icon: DollarSign,
+  }
+];
 
 export function Dashboard() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [dashboards, setDashboards] = useState<any[]>([]);
-  const [selectedDashboard, setSelectedDashboard] = useState<string | null>(null);
+  const [user, setUser] = React.useState<any>(null);
+  const [selectedDashboard, setSelectedDashboard] = React.useState(1);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
@@ -22,37 +42,13 @@ export function Dashboard() {
     getUser();
   }, []);
 
-  useEffect(() => {
-    const fetchDashboards = async () => {
-      if (user) {
-        const { data, error } = await supabase
-          .from('dashboard')
-          .select('id, nome, url')
-          .eq('user', user.id);
-
-        if (error) {
-          console.error('Erro ao buscar dashboards:', error);
-        } else {
-          const dashboardsData = data.map((item: any) => ({
-            id: item.id,
-            title: item.nome,
-            url: item.url,
-            icon: TrendingUp, // Você pode ajustar o ícone conforme necessário
-          }));
-          setDashboards(dashboardsData);
-          if (dashboardsData.length > 0) {
-            setSelectedDashboard(dashboardsData[0].url);
-          }
-        }
-      }
-    };
-
-    fetchDashboards();
-  }, [user]);
-
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate('/');
+  };
+
+  const getDashboardUrl = (id: number) => {
+    return "https://public.tableau.com/views/SuperstoreSales_24/Overview?:showVizHome=no&:embed=true";
   };
 
   return (
@@ -65,6 +61,13 @@ export function Dashboard() {
             <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
           </div>
           <div className="flex items-center space-x-4">
+            <Link
+              to="/settings"
+              className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+              aria-label="Settings"
+            >
+              <Settings className="h-5 w-5" />
+            </Link>
             <div className="flex items-center">
               <User className="h-5 w-5 text-gray-500 mr-2" />
               <span className="text-sm text-gray-600">
@@ -94,15 +97,15 @@ export function Dashboard() {
               {dashboards.map((dashboard) => (
                 <li key={dashboard.id}>
                   <button 
-                    onClick={() => setSelectedDashboard(dashboard.url)}
+                    onClick={() => setSelectedDashboard(dashboard.id)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      selectedDashboard === dashboard.url 
+                      selectedDashboard === dashboard.id 
                         ? 'bg-blue-50 text-blue-700' 
                         : 'hover:bg-gray-100'
                     }`}
                   >
                     <dashboard.icon className={`h-5 w-5 ${
-                      selectedDashboard === dashboard.url 
+                      selectedDashboard === dashboard.id 
                         ? 'text-blue-700' 
                         : 'text-blue-600'
                     }`} />
@@ -117,16 +120,14 @@ export function Dashboard() {
         {/* Main Content */}
         <main className="flex-1 p-8">
           <div className="w-[85%] h-[80vh] mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-            {selectedDashboard && (
-              <iframe
-                src={selectedDashboard}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            )}
+            <iframe
+              src={getDashboardUrl(selectedDashboard)}
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              allowFullScreen
+              className="w-full h-full"
+            />
           </div>
         </main>
       </div>

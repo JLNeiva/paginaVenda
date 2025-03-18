@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App';
 import { Dashboard } from './pages/Dashboard';
+import { Settings } from './pages/Settings';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import './index.css';
 
@@ -16,6 +17,14 @@ createRoot(document.getElementById('root')!).render(
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />
