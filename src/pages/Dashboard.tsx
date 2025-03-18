@@ -56,6 +56,8 @@ export function Dashboard() {
     navigate('/');
   };
 
+  const isAdmin = user?.email === "jlianeiva@gmail.com" || user?.email === "jonas.neiva@gmail.com";
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -66,13 +68,15 @@ export function Dashboard() {
             <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
           </div>
           <div className="flex items-center space-x-4">
-            <Link
-              to="/settings"
-              className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
-              aria-label="Settings"
-            >
-              <Settings className="h-5 w-5" />
-            </Link>
+            {isAdmin && (
+              <Link
+                to="/settings"
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                aria-label="Settings"
+              >
+                <Settings className="h-5 w-5" />
+              </Link>
+            )}
             <div className="flex items-center">
               <User className="h-5 w-5 text-gray-500 mr-2" />
               <span className="text-sm text-gray-600">
@@ -141,3 +145,5 @@ export function Dashboard() {
     </div>
   );
 }
+
+<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />

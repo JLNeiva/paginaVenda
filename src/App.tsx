@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { 
+  LayoutDashboard,
   BarChart3, 
   PieChart, 
   LineChart, 
@@ -27,7 +28,7 @@ function App() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <BarChart3 className="h-8 w-8 text-blue-600" />
+            <LayoutDashboard className="h-8 w-8 text-blue-600" />
             <span className="ml-2 text-xl font-bold text-gray-800">DataVision</span>
           </div>
           <nav className="hidden md:flex space-x-8">
