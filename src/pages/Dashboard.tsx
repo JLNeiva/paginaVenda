@@ -147,4 +147,4 @@ export function Dashboard() {
   );
 }
 
-<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+//<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />

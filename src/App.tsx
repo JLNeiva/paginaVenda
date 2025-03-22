@@ -1,27 +1,45 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   LayoutDashboard,
-  BarChart3, 
-  PieChart, 
-  LineChart, 
-  TrendingUp, 
-  Clock, 
-  Target, 
-  Zap, 
-  CheckCircle, 
-//  ChevronRight, 
   Mail, 
   Phone, 
   MapPin, 
   Linkedin, 
   Twitter, 
   Instagram, 
-  Facebook 
+  Facebook,
+  TrendingUp, // Adicione esta linha
+  Clock,
+  Target,
+  PieChart,
+  Zap,
+  LineChart,
+  CheckCircle
 } from 'lucide-react';
 import { AuthButton } from './components/AuthButton';
+import { supabase } from './lib/supabase';
 
 function App() {
+  const [webhookUrl, setWebhookUrl] = useState('');
+
+  useEffect(() => {
+    const fetchWebhookUrl = async () => {
+      const { data, error } = await supabase
+        .from('parametro')
+        .select('valor')
+        .eq('chave', 'WebHoockFormulario')
+        .single();
+
+      if (error) {
+        console.error('Erro ao buscar o parâmetro WebHoockFormulario:', error);
+      } else {
+        setWebhookUrl(data.valor);
+      }
+    };
+
+    fetchWebhookUrl();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -383,7 +401,7 @@ function App() {
                       setTimeout(() => mensagemDiv.remove(), 3000);
                     };
                     
-                    fetch('http://localhost:5678/webhook-test/a1b099a3-bce7-46d3-8c89-9dc41cf13cfa', { // Substitua {your-webhook-id} pelo ID do seu webhook
+                    fetch(webhookUrl, { // Usa o valor do parâmetro WebHoockFormulario
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
