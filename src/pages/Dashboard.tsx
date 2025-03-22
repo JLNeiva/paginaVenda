@@ -29,7 +29,8 @@ export function Dashboard() {
         const { data, error } = await supabase
           .from('dashboard')
           .select('id, nome, url')
-          .eq('email', user.email);
+          .eq('email', user.email)
+          .eq('ativo', true); // Adiciona a condição para selecionar apenas registros ativos
 
         if (error) {
           console.error('Erro ao buscar dashboards:', error);

@@ -8,7 +8,8 @@ import {
   Plus,
   Loader2,
   AlertCircle,
-  X
+  X,
+  Clipboard
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -112,7 +113,6 @@ export function Settings() {
 
       const dashboardData = {
         ...formData,
-        email: user.email,
       };
 
       let error;
@@ -169,6 +169,15 @@ export function Settings() {
       toast.error('Erro ao excluir dashboard: ' + error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(formData.url);
+      toast.success('URL copiada com sucesso');
+    } catch (error) {
+      toast.error('Erro ao copiar URL: ' + error.message);
     }
   };
 
@@ -306,14 +315,23 @@ export function Settings() {
                   <label htmlFor="url" className="block text-sm font-medium text-gray-700">
                     URL *
                   </label>
-                  <input
-                    type="url"
-                    id="url"
-                    value={formData.url}
-                    onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
-                    required
-                  />
+                  <div className="flex">
+                    <input
+                      type="url"
+                      id="url"
+                      value={formData.url}
+                      onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={handleCopyUrl}
+                      className="ml-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                    >
+                      <Clipboard className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
 
                 <div>
