@@ -303,7 +303,7 @@ export function Settings() {
         {/* Main Content */}
         <div className="flex-1 p-8">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/dashboard')}
             className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
