@@ -69,12 +69,12 @@ function App() {
               Nossa plataforma de análise de dados oferece insights em tempo real para impulsionar o crescimento do seu negócio.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
-                Começar Agora
-              </button>
-              <button className="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors">
+              <a 
+                href="#nossaPlataforma" 
+                className="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors inline-block text-center"
+              >
                 Saiba Mais
-              </button>
+              </a>
             </div>
           </div>
           <div className="md:w-1/2">
@@ -292,7 +292,7 @@ function App() {
       </section>
 
       {/* Screenshot do Produto */}
-      <section className="py-20">
+      <section id ="nossaPlataforma" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Nossa Plataforma</h2>
@@ -514,9 +514,12 @@ function App() {
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Agende uma demonstração gratuita e descubra como nossa plataforma pode impulsionar o crescimento do seu negócio.
           </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors text-lg">
+          <a 
+            href="#contato" 
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors text-lg"
+          >
             Agendar Demonstração Gratuita
-          </button>
+          </a>
         </div>
       </section>
 
@@ -524,6 +527,9 @@ function App() {
       <footer className="bg-gray-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div> </div>
+            <div> </div>
+            <div> </div>
             <div>
               <div className="flex items-center mb-4">
                 <LayoutDashboard className="h-8 w-8 text-blue-400" />
@@ -547,36 +553,7 @@ function App() {
                 </a>
               </div>
             </div>
-            
-            <div>
-              <h3 className="text-lg font-bold mb-4">Empresa</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white">Sobre nós</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Carreiras</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Blog</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Imprensa</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-bold mb-4">Recursos</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white">Documentação</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Tutoriais</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Webinars</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Suporte</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-bold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white">Termos de Serviço</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Política de Privacidade</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Cookies</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">LGPD</a></li>
-              </ul>
-            </div>
+          
           </div>
           
           <div className="pt-8 border-t border-gray-700 text-center text-gray-400">
