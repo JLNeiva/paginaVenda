@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { 
   LayoutDashboard, 
@@ -26,20 +26,42 @@ export function Dashboard() {
   useEffect(() => {
     const fetchDashboards = async () => {
       if (user) {
-        const { data, error } = await supabase
+        // Primeiro, tenta buscar os dashboards do usuário
+        let { data: userDashboards } = await supabase
           .from('dashboard')
           .select('id, nome, url')
           .eq('email', user.email)
-          .eq('ativo', true); // Adiciona a condição para selecionar apenas registros ativos
+          .eq('ativo', true);
 
-        if (error) {
-          console.error('Erro ao buscar dashboards:', error);
+        // Se não encontrar dashboards do usuário ou ocorrer erro, busca os dashboards de teste
+        if (!userDashboards?.length) {
+          const { data: testDashboards, error: testError } = await supabase
+            .from('dashboard')
+            .select('id, nome, url')
+            .eq('email', 'teste@dashvision.com.br')
+            .eq('ativo', true);
+
+          if (testError) {
+            console.error('Erro ao buscar dashboards de teste:', testError);
+          } else {
+            const dashboardsData = testDashboards.map((item: any) => ({
+              id: item.id,
+              title: item.nome,
+              url: item.url,
+              icon: TrendingUp,
+            }));
+            setDashboards(dashboardsData);
+            if (dashboardsData.length > 0) {
+              setSelectedDashboard(dashboardsData[0].url);
+            }
+          }
         } else {
-          const dashboardsData = data.map((item: any) => ({
+          // Usa os dashboards do usuário
+          const dashboardsData = userDashboards.map((item: any) => ({
             id: item.id,
             title: item.nome,
             url: item.url,
-            icon: TrendingUp, // Você pode ajustar o ícone conforme necessário
+            icon: TrendingUp,
           }));
           setDashboards(dashboardsData);
           if (dashboardsData.length > 0) {
@@ -128,8 +150,8 @@ export function Dashboard() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
-          <div className="w-[85%] h-[80vh] mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+        <main className="flex-1 p-1">
+          <div className="w-[95%] h-[90vh] mx-auto bg-white rounded-lg shadow-md overflow-hidden">
             {selectedDashboard && (
               <iframe
                 src={selectedDashboard}

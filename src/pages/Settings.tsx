@@ -41,7 +41,8 @@ export function Settings() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [parametros, setParametros] = useState<Parametro[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [showDashboardForm, setShowDashboardForm] = useState(false);
+  const [showParametroForm, setShowParametroForm] = useState(false);
   const [editingDashboard, setEditingDashboard] = useState<Dashboard | null>(null);
   const [editingParametro, setEditingParametro] = useState<Parametro | null>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -159,7 +160,7 @@ export function Settings() {
       if (error) throw error;
 
       toast.success(`Dashboard ${editingDashboard ? 'atualizado' : 'criado'} com sucesso`);
-      setShowForm(false);
+      setShowDashboardForm(false);
       setEditingDashboard(null);
       setFormData({ nome: '', url: '', ativo: true, email: '' });
       fetchDashboards();
@@ -178,7 +179,7 @@ export function Settings() {
       ativo: dashboard.ativo,
       email: dashboard.email,
     });
-    setShowForm(true);
+    setShowDashboardForm(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -206,7 +207,7 @@ export function Settings() {
       await navigator.clipboard.writeText(formData.url);
       toast.success('URL copiada com sucesso');
     } catch (error) {
-      toast.error('Erro ao copiar URL: ' + error.message);
+      toast.error('Erro ao copiar URL: ' + (error instanceof Error ? error.message : String(error)));
     }
   };
 
@@ -236,7 +237,7 @@ export function Settings() {
       if (error) throw error;
 
       toast.success(`Parâmetro ${editingParametro ? 'atualizado' : 'criado'} com sucesso`);
-      setShowForm(false);
+      setShowParametroForm(false);
       setEditingParametro(null);
       setParametroData({ id: '', chave: '', valor: '' });
       fetchParametros();
@@ -254,7 +255,7 @@ export function Settings() {
       chave: parametro.chave,
       valor: parametro.valor,
     });
-    setShowForm(true);
+    setShowParametroForm(true);
   };
 
   const handleParametroDelete = async (id: string) => {
@@ -278,13 +279,13 @@ export function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-100">
       <Toaster position="top-right" />
       
-      <div className="max-w-6xl mx-auto flex">
+      <div className="flex h-screen">
         {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-md min-h-[calc(100vh-4rem)] p-4">
-          <nav className="space-y-4">
+        <aside className="w-64 bg-white shadow-md">
+          <nav className="space-y-4 p-4">
             <button
               onClick={() => setActiveTab('dashboards')}
               className={`w-full text-left p-2 rounded-md ${activeTab === 'dashboards' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
@@ -301,163 +302,307 @@ export function Settings() {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            Voltar
-          </button>
+        <div className="flex-1 overflow-auto">
+          <div className="p-8">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+            >
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Voltar
+            </button>
 
-          {activeTab === 'dashboards' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">Gerenciar Dashboards</h2>
-                <button
-                  onClick={() => {
-                    setEditingDashboard(null);
-                    setFormData({ nome: '', url: '', ativo: true, email: '' });
-                    setShowForm(true);
-                  }}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                  disabled={loading}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Dashboard
-                </button>
-              </div>
-
-              {loading ? (
-                <div className="flex justify-center items-center py-8">
-                  <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+            {activeTab === 'dashboards' && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Gerenciar Dashboards</h2>
+                  <button
+                    onClick={() => {
+                      setEditingDashboard(null);
+                      setFormData({ nome: '', url: '', ativo: true, email: '' });
+                      setShowDashboardForm(true);
+                    }}
+                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    disabled={loading}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Adicionar Dashboard
+                  </button>
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full table-fixed">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                        <th className="w-2/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
-                        <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Criado em</th>
-                        <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th className="w-1/6 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {dashboards.map((dashboard) => (
-                        <tr key={dashboard.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">{dashboard.nome}</td>
-                          <td className="px-6 py-4 whitespace-normal break-words max-w-sm">
-                            <a href={dashboard.url} target="_blank" rel="noopener noreferrer" 
-                              className="text-blue-600 hover:underline break-all">
-                              {dashboard.url}
-                            </a>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              dashboard.ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }`}>
-                              {dashboard.ativo ? 'Ativo' : 'Inativo'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(dashboard.created_at).toLocaleDateString('pt-BR')}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {dashboard.email}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button
-                              onClick={() => handleEdit(dashboard)}
-                              className="text-blue-600 hover:text-blue-900 mr-3"
-                              aria-label="Editar"
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => setDeleteConfirm(dashboard.id)}
-                              className="text-red-600 hover:text-red-900"
-                              aria-label="Excluir"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </td>
+
+                {loading ? (
+                  <div className="flex justify-center items-center py-8">
+                    <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full table-fixed">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                          <th className="w-2/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
+                          <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Criado em</th>
+                          <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                          <th className="w-1/6 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'parametros' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">Gerenciar Parâmetros</h2>
-                <button
-                  onClick={() => {
-                    setEditingParametro(null);
-                    setParametroData({ id: '', chave: '', valor: '' });
-                    setShowForm(true);
-                  }}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                  disabled={loading}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Parâmetro
-                </button>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {dashboards.map((dashboard) => (
+                          <tr key={dashboard.id}>
+                            <td className="px-6 py-4 whitespace-nowrap">{dashboard.nome}</td>
+                            <td className="px-6 py-4 whitespace-normal break-words max-w-sm">
+                              <a href={dashboard.url} target="_blank" rel="noopener noreferrer" 
+                                className="text-blue-600 hover:underline break-all">
+                                {dashboard.url}
+                              </a>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                dashboard.ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                              }`}>
+                                {dashboard.ativo ? 'Ativo' : 'Inativo'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {new Date(dashboard.created_at).toLocaleDateString('pt-BR')}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {dashboard.email}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                              <button
+                                onClick={() => handleEdit(dashboard)}
+                                className="text-blue-600 hover:text-blue-900 mr-3"
+                                aria-label="Editar"
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => setDeleteConfirm(dashboard.id)}
+                                className="text-red-600 hover:text-red-900"
+                                aria-label="Excluir"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
+            )}
 
-              {loading ? (
-                <div className="flex justify-center items-center py-8">
-                  <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+            {activeTab === 'parametros' && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Gerenciar Parâmetros</h2>
+                  <button
+                    onClick={() => {
+                      setEditingParametro(null);
+                      setParametroData({ id: '', chave: '', valor: '' });
+                      setShowParametroForm(true);
+                    }}
+                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    disabled={loading}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Adicionar Parâmetro
+                  </button>
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full table-fixed">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chave</th>
-                        <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                        <th className="w-1/6 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {parametros.map((parametro) => (
-                        <tr key={parametro.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">{parametro.chave}</td>
-                          <td className="px-6 py-4 whitespace-normal break-words max-w-xs">{parametro.valor}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button
-                              onClick={() => handleParametroEdit(parametro)}
-                              className="text-blue-600 hover:text-blue-900 mr-3"
-                              aria-label="Editar"
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => setDeleteConfirm(parametro.id)}
-                              className="text-red-600 hover:text-red-900"
-                              aria-label="Excluir"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </td>
+
+                {loading ? (
+                  <div className="flex justify-center items-center py-8">
+                    <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full table-fixed">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chave</th>
+                          <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                          <th className="w-1/6 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          )}
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {parametros.map((parametro) => (
+                          <tr key={parametro.id}>
+                            <td className="px-6 py-4 whitespace-nowrap">{parametro.chave}</td>
+                            <td className="px-6 py-4 whitespace-normal break-words max-w-xs">{parametro.valor}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                              <button
+                                onClick={() => handleParametroEdit(parametro)}
+                                className="text-blue-600 hover:text-blue-900 mr-3"
+                                aria-label="Editar"
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => setDeleteConfirm(parametro.id)}
+                                className="text-red-600 hover:text-red-900"
+                                aria-label="Excluir"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {showForm && (
+      {/* Modal de Confirmação de Exclusão */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex items-center mb-4">
+              <AlertCircle className="h-6 w-6 text-red-600 mr-2" />
+              <h3 className="text-lg font-medium text-gray-900">
+                Confirmar Exclusão
+              </h3>
+            </div>
+            <p className="text-gray-500 mb-6">
+              Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  if (activeTab === 'dashboards') {
+                    handleDelete(deleteConfirm);
+                  } else {
+                    handleParametroDelete(deleteConfirm);
+                  }
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDashboardForm && activeTab === 'dashboards' && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium text-gray-900">
+                {editingDashboard ? 'Editar Dashboard' : 'Adicionar Dashboard'}
+              </h3>
+              <button
+                onClick={() => setShowDashboardForm(false)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
+                  Nome *
+                </label>
+                <input
+                  type="text"
+                  id="nome"
+                  value={formData.nome}
+                  onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="url" className="block text-sm font-medium text-gray-700">
+                  URL *
+                </label>
+                <div className="mt-1 flex rounded-md shadow-sm">
+                  <input
+                    type="url"
+                    id="url"
+                    value={formData.url}
+                    onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                    className="flex-1 block w-full rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCopyUrl}
+                    className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 hover:text-gray-600"
+                  >
+                    <Clipboard className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="ativo"
+                  checked={formData.ativo}
+                  onChange={(e) => setFormData({ ...formData, ativo: e.target.checked })}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label htmlFor="ativo" className="ml-2 block text-sm text-gray-700">
+                  Dashboard ativo
+                </label>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowDashboardForm(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {loading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    'Salvar'
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showParametroForm && activeTab === 'parametros' && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
@@ -465,7 +610,7 @@ export function Settings() {
                 {editingParametro ? 'Editar Parâmetro' : 'Adicionar Parâmetro'}
               </h3>
               <button
-                onClick={() => setShowForm(false)}
+                onClick={() => setShowParametroForm(false)}
                 className="text-gray-400 hover:text-gray-500"
               >
                 <X className="h-5 w-5" />
@@ -504,7 +649,7 @@ export function Settings() {
               <div className="flex justify-end space-x-3 mt-6">
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)}
+                  onClick={() => setShowParametroForm(false)}
                   className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                 >
                   Cancelar

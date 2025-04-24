@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   LayoutDashboard,
   Mail, 
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { AuthButton } from './components/AuthButton';
 import { supabase } from './lib/supabase';
+import { Link } from 'react-router-dom';
 
 function App() {
   const [webhookUrl, setWebhookUrl] = useState('');
@@ -50,6 +51,7 @@ function App() {
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
           <nav className="hidden md:flex space-x-8">
+            <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium">Sobre nós</Link>
             <a href="#beneficios" className="text-gray-600 hover:text-blue-600 font-medium">Benefícios</a>
             <a href="#casos" className="text-gray-600 hover:text-blue-600 font-medium">Casos de Uso</a>
             <a href="#contato" className="text-gray-600 hover:text-blue-600 font-medium">Contato</a>
@@ -349,7 +351,9 @@ function App() {
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 mr-3 flex-shrink-0" />
-                    <span>contato@dashvision.com.br</span>
+                    <a href="mailto:suporte@institutometamorfose.com.br" className="hover:underline">
+                      suporte@institutometamorfose.com.br
+                    </a>
                   </div>
                   <div className="flex items-start">
                     <Phone className="h-6 w-6 mr-3 flex-shrink-0" />
@@ -468,7 +472,7 @@ function App() {
                   
                   <div>
                     <label htmlFor="empresa" className="block text-sm font-medium text-gray-700 mb-1">
-                      Empresa *
+                      Atuação *
                     </label>
                     <input 
                       type="text" 
@@ -476,7 +480,7 @@ function App() {
                       name="empresa"
                       required 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Nome da sua empresa"
+                      placeholder="Alimentação, Saúde, Transporte..."
                     />
                   </div>
                   
@@ -518,7 +522,7 @@ function App() {
             href="#contato" 
             className="inline-block bg-white text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors text-lg"
           >
-            Agendar Demonstração Gratuita
+            Entre em contato com nossa equipe
           </a>
         </div>
       </section>
@@ -527,9 +531,7 @@ function App() {
       <footer className="bg-gray-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div> </div>
-            <div> </div>
-            <div> </div>
+
             <div>
               <div className="flex items-center mb-4">
                 <LayoutDashboard className="h-8 w-8 text-blue-400" />
@@ -538,6 +540,12 @@ function App() {
               <p className="text-gray-400 mb-4">
                 Transformando dados em decisões estratégicas desde 2018.
               </p>
+              <div className="flex items-center space-x-4 mb-4">
+                <Mail className="h-5 w-5 text-gray-400" />
+                <a href="mailto:suporte@institutometamorfose.com.br" className="text-gray-400 hover:text-white">
+                  suporte@institutometamorfose.com.br
+                </a>
+              </div>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-white">
                   <Linkedin className="h-5 w-5" />
@@ -553,7 +561,27 @@ function App() {
                 </a>
               </div>
             </div>
-          
+
+<div> </div>
+            <div>
+              <h3 className="text-lg font-bold mb-4">Empresa</h3>
+              <ul className="space-y-2">
+                <li><Link to="/about" className="text-gray-400 hover:text-white">Sobre nós</Link></li>
+                <li><a href="#" className="text-gray-400 hover:text-white">Soluções</a></li>
+                <li><a href="#beneficios" className="text-gray-400 hover:text-white">Benefícios</a></li>
+                <li><a href="#casos" className="text-gray-400 hover:text-white">Casos de Uso</a></li>
+
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-bold mb-4">Legal</h3>
+              <ul className="space-y-2">
+                <li><Link to="/terms" className="text-gray-400 hover:text-white">Termos de uso</Link></li>
+                <li><Link to="/privacy" className="text-gray-400 hover:text-white">Política de Privacidade</Link></li>
+              </ul>
+            </div>
+     
           </div>
           
           <div className="pt-8 border-t border-gray-700 text-center text-gray-400">
