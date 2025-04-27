@@ -47,7 +47,11 @@ function App() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <LayoutDashboard className="h-8 w-8 text-blue-600" />
+            <img 
+              src="/assets/dashvision-logo.svg" 
+              alt="DashVision Logo" 
+              className="h-8 w-auto"
+            />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
           <nav className="hidden md:flex space-x-8">
@@ -379,6 +383,7 @@ function App() {
                     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
                     const telefone = (form.elements.namedItem('telefone') as HTMLInputElement).value;
                     const empresa = (form.elements.namedItem('empresa') as HTMLInputElement).value;
+                    const observacoes = (form.elements.namedItem('observacoes') as HTMLTextAreaElement).value;
 
                     const exibirMensagem = (mensagem: string, cor: string) => {
                       const mensagemDiv = document.createElement("div");
@@ -415,6 +420,7 @@ function App() {
                         email: email,
                         telefone: telefone,
                         empresa: empresa,
+                        observacoes: observacoes,
                       }),
                     }).then(response => {
                       if (response.ok) {
@@ -438,7 +444,7 @@ function App() {
                       id="nome" 
                       name="nome"
                       required 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="Seu nome completo"
                     />
                   </div>
@@ -452,7 +458,7 @@ function App() {
                       id="email" 
                       name="email"
                       required 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="seu.email@empresa.com.br"
                     />
                   </div>
@@ -465,22 +471,57 @@ function App() {
                       type="tel" 
                       id="telefone" 
                       name="telefone"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="(00) 00000-0000"
+                      maxLength={15}
+                      onKeyPress={(e) => {
+                        const onlyNumbers = /[0-9]/;
+                        if (!onlyNumbers.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onInput={(e) => {
+                        let value = (e.target as HTMLInputElement).value;
+                        value = value.replace(/\D/g, '');
+                        
+                        if (value.length <= 11) {
+                          value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                          value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                        } else {
+                          value = value.slice(0, 11);
+                          value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                          value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                        }
+                        
+                        (e.target as HTMLInputElement).value = value;
+                      }}
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="empresa" className="block text-sm font-medium text-gray-700 mb-1">
-                      Atuação *
+                      Ramo de Atuação *
                     </label>
                     <input 
                       type="text" 
                       id="empresa" 
                       name="empresa"
                       required 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Alimentação, Saúde, Transporte..."
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
+                      placeholder="Alimentação, Saúde, Logisitca ..."
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="observacoes" className="block text-sm font-medium text-gray-700 mb-1">
+                      Observações
+                    </label>
+                    <textarea 
+                      id="observacoes" 
+                      name="observacoes"
+                      rows={4}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic resize-none"
+                      placeholder="O que precisa? Quais dúvidas? ..."
                     />
                   </div>
                   
@@ -492,7 +533,7 @@ function App() {
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1 mr-2"
                     />
                     <label htmlFor="privacidade" className="text-sm text-gray-600">
-                      Concordo com a <a href="#" className="text-blue-600 hover:underline">Política de Privacidade</a> e com o recebimento de comunicações.
+                      Concordo com a <Link to="/privacy" className="text-blue-600 hover:underline">Política de Privacidade</Link> e com o recebimento de comunicações.
                     </label>
                   </div>
                   
@@ -534,7 +575,11 @@ function App() {
 
             <div>
               <div className="flex items-center mb-4">
-                <LayoutDashboard className="h-8 w-8 text-blue-400" />
+              <img 
+              src="/assets/dashvision-logo.svg" 
+              alt="DashVision Logo" 
+              className="h-8 w-auto"
+            />
                 <span className="ml-2 text-xl font-bold">DashVision</span>
               </div>
               <p className="text-gray-400 mb-4">

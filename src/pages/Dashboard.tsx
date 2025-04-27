@@ -86,8 +86,12 @@ export function Dashboard() {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <LayoutDashboard className="h-8 w-8 text-blue-600" />
+          <div className="flex items-center">       
+            <img 
+              src="/assets/dashvision-logo.svg" 
+              alt="DashVision Logo" 
+              className="h-8 w-auto"
+            />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
           <div className="flex items-center space-x-4">
