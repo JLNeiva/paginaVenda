@@ -1,4 +1,4 @@
-import { LayoutDashboard, ArrowLeft, FileText, FormInput } from 'lucide-react';
+import { ArrowLeft, FileText, FormInput } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -25,7 +25,11 @@ export function Terms() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <LayoutDashboard className="h-8 w-8 text-blue-600" />
+            <img 
+              src="/assets/dashvision-logo.svg" 
+              alt="DashVision Logo" 
+              className="h-8 w-auto"
+            />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
         </div>

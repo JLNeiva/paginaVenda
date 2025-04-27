@@ -1,4 +1,4 @@
-import { LayoutDashboard, ArrowLeft, LineChart, Bot, Shield, Globe, Target, FormInput } from 'lucide-react';
+import { ArrowLeft, LineChart, Bot, Shield, Globe, Target, FormInput } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -24,7 +24,11 @@ export function About() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <LayoutDashboard className="h-8 w-8 text-blue-600" />
+            <img 
+              src="/assets/dashvision-logo.svg" 
+              alt="DashVision Logo" 
+              className="h-8 w-auto"
+            />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </div>
         </div>
@@ -62,7 +66,7 @@ export function About() {
           </section>
 
           {/* Quem Somos Section */}
-          <section className="bg-gray-50 py-16 mb-16">
+          <section id="quemSomos" className="bg-gray-50 py-16 mb-16">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold mb-8 text-center">🚀 Quem Somos</h2>
               <p className="text-lg text-gray-700 mb-12 text-center">

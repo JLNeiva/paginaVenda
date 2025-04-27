@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { 
-  LayoutDashboard,
   Mail, 
   Phone, 
   MapPin, 
@@ -612,7 +611,6 @@ function App() {
               <h3 className="text-lg font-bold mb-4">Empresa</h3>
               <ul className="space-y-2">
                 <li><Link to="/about" className="text-gray-400 hover:text-white">Sobre nós</Link></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Soluções</a></li>
                 <li><a href="#beneficios" className="text-gray-400 hover:text-white">Benefícios</a></li>
                 <li><a href="#casos" className="text-gray-400 hover:text-white">Casos de Uso</a></li>
 
