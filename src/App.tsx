@@ -40,24 +40,35 @@ function App() {
     fetchWebhookUrl();
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
+          <Link to="/" onClick={scrollToTop} className="flex items-center">
             <img
               src="/assets/dashvision-logo.svg"
               alt="DashVision Logo"
               className="h-8 w-auto"
             />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
-          </div>
+          </Link>
           <nav className="hidden md:flex space-x-8">
             <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium">Sobre nós</Link>
-            <a href="#beneficios" className="text-gray-600 hover:text-blue-600 font-medium">Benefícios</a>
-            <a href="#casos" className="text-gray-600 hover:text-blue-600 font-medium">Casos de Uso</a>
-            <a href="#contato" className="text-gray-600 hover:text-blue-600 font-medium">Contato</a>
+            <a onClick={() => scrollToSection('beneficios')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Benefícios</a>
+            <a onClick={() => scrollToSection('casos')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Casos de Uso</a>
+            <a onClick={() => scrollToSection('contato')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Contato</a>
           </nav>
           <AuthButton />
         </div>
@@ -66,12 +77,12 @@ function App() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-10 md:mb-0">
+          <div className="md:w-1/2 mb-10 md:mb-0 mr-4">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Transforme dados em decisões estratégicas
             </h1>
             <p className="text-xl mb-8">
-              Nossa plataforma de análise de dados oferece insights em tempo real para impulsionar o crescimento do seu negócio.
+            Nossa plataforma de dashboards de indicadores de desempenho oferece inteligência de dados para impulsionar o crescimento do seu negócio.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <a
@@ -97,12 +108,12 @@ function App() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <p className="text-4xl font-bold text-blue-600 mb-2">98%</p>
-              <p className="text-gray-600">de satisfação dos clientes</p>
+              <p className="text-4xl font-bold text-blue-600 mb-2">250%</p>
+              <p className="text-gray-600">ROI no primeiro ano</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <p className="text-4xl font-bold text-blue-600 mb-2">+500</p>
-              <p className="text-gray-600">empresas atendidas</p>
+              <p className="text-4xl font-bold text-blue-600 mb-2">+30 h</p>
+              <p className="text-gray-600">mensais economia por equipe</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
               <p className="text-4xl font-bold text-blue-600 mb-2">35%</p>
@@ -464,12 +475,13 @@ function App() {
 
                   <div>
                     <label htmlFor="telefone" className="block text-sm font-medium text-gray-700 mb-1">
-                      Telefone
+                      Telefone *
                     </label>
                     <input
                       type="tel"
                       id="telefone"
                       name="telefone"
+                      required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="(00) 00000-0000"
                       maxLength={15}

@@ -6,12 +6,12 @@ import { AuthButton } from '../components/AuthButton';
 export function About() {
   const navigate = useNavigate();
 
-  const handleContactClick = () => {
+  const handleSectionNavigation = (sectionId: string) => {
     navigate('/');
     setTimeout(() => {
-      const contactElement = document.getElementById('contato');
-      if (contactElement) {
-        contactElement.scrollIntoView({ behavior: 'smooth' });
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
   };
@@ -22,6 +22,7 @@ export function About() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center">
@@ -33,7 +34,10 @@ export function About() {
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </Link>
           <nav className="hidden md:flex space-x-8">
-            <a href="../" className="text-gray-600 hover:text-blue-600 font-medium">Home</a>
+            <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium">Sobre nós</Link>
+            <a onClick={() => handleSectionNavigation('beneficios')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Benefícios</a>
+            <a onClick={() => handleSectionNavigation('casos')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Casos de Uso</a>
+            <a onClick={() => handleSectionNavigation('contato')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Contato</a>
           </nav>
           <AuthButton />
         </div>
@@ -50,7 +54,7 @@ export function About() {
             Voltar
           </button> */}
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Sobre Nós | DashVision</h1>
-          <p className="text-xl mb-4">Na DashVision, transformamos dados em decisões estratégicas.</p>
+          <p className="text-xl mb-4">Com o DashVision transformamos dados em decisões estratégicas.</p>
         </div>
       </section>
 
@@ -104,7 +108,7 @@ export function About() {
 
           {/* Instituto Section */}
           <section className="max-w-4xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold mb-8">🌐 A Força do Grupo Instituto Metamorfose</h2>
+            <h2 className="text-3xl font-bold mb-8">🌐 A força do Instituto Metamorfose</h2>
             <p className="text-lg text-gray-700 mb-6">
               Ser parte do Instituto Metamorfose nos dá uma visão ampliada:
               Não entregamos apenas tecnologia, entregamos transformação.
@@ -122,7 +126,7 @@ export function About() {
                 className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
               >
                 <Globe className="h-5 w-5 mr-2" />
-                Saiba mais sobre o nosso grupo
+                Conheça o Instituto Metamorfose
               </a>
             </div>
           </section>
@@ -148,7 +152,7 @@ export function About() {
               Entre em contato e descubra como a DashVision pode ajudar sua empresa a enxergar além dos números.
             </p>
             <a
-              onClick={handleContactClick}
+              onClick={() => handleSectionNavigation('contato')}
               className="inline-flex items-center px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
             >
               <FormInput className="h-5 w-5 mr-2" />

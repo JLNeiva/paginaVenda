@@ -2,27 +2,29 @@ import { Shield, FormInput } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthButton } from '../components/AuthButton';
 
 export function Privacy() {
   const navigate = useNavigate();
- // const currentDate = new Date("2018-05-05").toLocaleDateString('pt-BR');
+  // const currentDate = new Date("2018-05-05").toLocaleDateString('pt-BR');
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleContactClick = () => {
+  const handleSectionNavigation = (sectionId: string) => {
     navigate('/');
     setTimeout(() => {
-      const contactElement = document.getElementById('contato');
-      if (contactElement) {
-        contactElement.scrollIntoView({ behavior: 'smooth' });
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
   };
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center">
@@ -33,6 +35,13 @@ export function Privacy() {
             />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
           </Link>
+          <nav className="hidden md:flex space-x-8">
+            <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium">Sobre nós</Link>
+            <a onClick={() => handleSectionNavigation('beneficios')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Benefícios</a>
+            <a onClick={() => handleSectionNavigation('casos')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Casos de Uso</a>
+            <a onClick={() => handleSectionNavigation('contato')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Contato</a>
+          </nav>
+          <AuthButton />
         </div>
       </header>
 
@@ -49,7 +58,7 @@ export function Privacy() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <p className="text-lg text-gray-700 leading-relaxed mb-8">
-              A DashVision valoriza a sua privacidade. Este documento explica como coletamos, 
+              A DashVision valoriza a sua privacidade. Este documento explica como coletamos,
               usamos e protegemos suas informações ao utilizar nosso site.
             </p>
 
@@ -75,7 +84,7 @@ export function Privacy() {
                 <h2 className="text-2xl font-bold">5. Segurança</h2>
               </div>
               <p className="text-lg">
-                Adotamos medidas de segurança para proteger suas informações contra 
+                Adotamos medidas de segurança para proteger suas informações contra
                 acessos não autorizados.
               </p>
             </section>
@@ -85,7 +94,7 @@ export function Privacy() {
               <section>
                 <h2 className="text-2xl font-bold mb-4">6. Direitos do Usuário (LGPD)</h2>
                 <p className="text-gray-700">
-                  Você pode solicitar a atualização, correção ou exclusão dos seus dados 
+                  Você pode solicitar a atualização, correção ou exclusão dos seus dados
                   a qualquer momento, conforme a Lei Geral de Proteção de Dados (LGPD).
                 </p>
               </section>
@@ -93,7 +102,7 @@ export function Privacy() {
               <section>
                 <h2 className="text-2xl font-bold mb-4">7. Alterações nesta Política</h2>
                 <p className="text-gray-700">
-                  A DashVision poderá atualizar esta Política de Privacidade periodicamente. 
+                  A DashVision poderá atualizar esta Política de Privacidade periodicamente.
                   Recomendamos que consulte esta página regularmente.
                 </p>
               </section>
@@ -105,8 +114,8 @@ export function Privacy() {
               <p className="text-xl text-gray-700 mb-8">
                 Entre em contato conosco para esclarecimentos sobre nossa política de privacidade.
               </p>
-              <a 
-                onClick={handleContactClick}
+              <a
+                onClick={() => handleSectionNavigation('contato')}
                 className="inline-flex items-center px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
               >
                 <FormInput className="h-5 w-5 mr-2" />

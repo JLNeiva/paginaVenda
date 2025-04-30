@@ -2,37 +2,46 @@ import { FileText, FormInput } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthButton } from '../components/AuthButton';
 
 export function Terms() {
   const navigate = useNavigate();
-//  const currentDate = new Date("2018-05-05").toLocaleDateString('pt-BR');
+  //  const currentDate = new Date("2018-05-05").toLocaleDateString('pt-BR');
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleContactClick = () => {
+  const handleSectionNavigation = (sectionId: string) => {
     navigate('/');
     setTimeout(() => {
-      const contactElement = document.getElementById('contato');
-      if (contactElement) {
-        contactElement.scrollIntoView({ behavior: 'smooth' });
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
   };
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center">
+          <div className="flex items-center">
             <img
               src="/assets/dashvision-logo.svg"
               alt="DashVision Logo"
               className="h-8 w-auto"
             />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
-          </Link>
+          </div>
+          <nav className="hidden md:flex space-x-8">
+            <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium">Sobre nós</Link>
+            <a onClick={() => handleSectionNavigation('beneficios')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Benefícios</a>
+            <a onClick={() => handleSectionNavigation('casos')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Casos de Uso</a>
+            <a onClick={() => handleSectionNavigation('contato')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Contato</a>
+          </nav>
+          <AuthButton />
         </div>
       </header>
 
@@ -49,8 +58,8 @@ export function Terms() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <p className="text-lg text-gray-700 leading-relaxed mb-12">
-              Bem-vindo ao site da DashVision. Ao acessar e utilizar este site, você concorda com os 
-              seguintes Termos de Uso. Caso não concorde com qualquer parte destes termos, por favor, 
+              Bem-vindo ao site da DashVision. Ao acessar e utilizar este site, você concorda com os
+              seguintes Termos de Uso. Caso não concorde com qualquer parte destes termos, por favor,
               não utilize nosso site.
             </p>
 
@@ -76,7 +85,7 @@ export function Terms() {
                 <h2 className="text-2xl font-bold">5. Alterações nos Termos</h2>
               </div>
               <p className="text-lg">
-                A DashVision reserva-se o direito de modificar estes Termos de Uso a qualquer momento. 
+                A DashVision reserva-se o direito de modificar estes Termos de Uso a qualquer momento.
                 Recomendamos a revisão periódica desta página.
               </p>
             </section>
@@ -87,8 +96,8 @@ export function Terms() {
               <p className="text-xl text-gray-700 mb-8">
                 Entre em contato para esclarecimentos sobre nossos termos de uso.
               </p>
-              <a 
-                onClick={handleContactClick}
+              <a
+                onClick={() => handleSectionNavigation('contato')}
                 className="inline-flex items-center px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
               >
                 <FormInput className="h-5 w-5 mr-2" />

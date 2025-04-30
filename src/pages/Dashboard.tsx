@@ -135,16 +135,20 @@ export function Dashboard() {
                     onClick={() => setSelectedDashboard(dashboard.url)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
                       selectedDashboard === dashboard.url 
-                        ? 'bg-blue-50 text-blue-700' 
-                        : 'hover:bg-gray-100'
+                        ? 'bg-blue-100 text-blue-700 font-medium' 
+                        : 'hover:bg-gray-50'
                     }`}
                   >
                     <dashboard.icon className={`h-5 w-5 ${
                       selectedDashboard === dashboard.url 
-                        ? 'text-blue-700' 
-                        : 'text-blue-600'
+                        ? 'text-blue-600' 
+                        : 'text-gray-400'
                     }`} />
-                    <span className="text-gray-700">{dashboard.title}</span>
+                    <span className={`${
+                      selectedDashboard === dashboard.url 
+                        ? 'text-blue-700' 
+                        : 'text-gray-600'
+                    }`}>{dashboard.title}</span>
                   </button>
                 </li>
               ))}

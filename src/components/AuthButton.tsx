@@ -135,7 +135,7 @@ export function AuthButton() {
             aria-expanded={showForm}
           >
             <User className="h-4 w-4" />
-            <span>Entrar</span>
+            <span>Área do cliente</span>
           </button>
 
           {showForm && (
