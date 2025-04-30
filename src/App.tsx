@@ -360,11 +360,11 @@ function App() {
                   </div>
                   <div className="flex items-start">
                     <Phone className="h-6 w-6 mr-3 flex-shrink-0" />
-                    <span>(11) 4002-8922</span>
+                    <span>(11) 97371-5113</span>
                   </div>
                   <div className="flex items-start">
                     <MapPin className="h-6 w-6 mr-3 flex-shrink-0" />
-                    <span>Av. Paulista, 1000 - São Paulo, SP</span>
+                    <span>Avenida Ator José Wilker nº605, Condomínio One World Offices, Bl.1A-Europe, 4º Andar, RJ</span>
                   </div>
                 </div>
               </div>
