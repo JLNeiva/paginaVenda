@@ -1,4 +1,4 @@
-import { ArrowLeft, LineChart, Bot, Shield, Globe, Target, FormInput} from 'lucide-react';
+import { LineChart, Bot, Shield, Globe, Target, FormInput} from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AuthButton } from '../components/AuthButton';

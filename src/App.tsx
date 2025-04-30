@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Linkedin, 
-  Twitter, 
-  Instagram, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Linkedin,
+  Twitter,
+  Instagram,
   Facebook,
   TrendingUp, // Adicione esta linha
   Clock,
@@ -46,9 +46,9 @@ function App() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <img 
-              src="/assets/dashvision-logo.svg" 
-              alt="DashVision Logo" 
+            <img
+              src="/assets/dashvision-logo.svg"
+              alt="DashVision Logo"
               className="h-8 w-auto"
             />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
@@ -74,8 +74,8 @@ function App() {
               Nossa plataforma de análise de dados oferece insights em tempo real para impulsionar o crescimento do seu negócio.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <a 
-                href="#nossaPlataforma" 
+              <a
+                href="#nossaPlataforma"
                 className="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors inline-block text-center"
               >
                 Saiba Mais
@@ -83,9 +83,9 @@ function App() {
             </div>
           </div>
           <div className="md:w-1/2">
-            <img 
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Executivos analisando dashboard" 
+            <img
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              alt="Executivos analisando dashboard"
               className="rounded-lg shadow-xl"
             />
           </div>
@@ -125,7 +125,7 @@ function App() {
               Nossa plataforma foi desenvolvida para transformar a maneira como sua empresa utiliza dados para tomar decisões.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-md">
               <TrendingUp className="h-12 w-12 text-blue-600 mb-4" />
@@ -134,7 +134,7 @@ function App() {
                 Transforme dados brutos em insights acionáveis para tomar decisões estratégicas com confiança e precisão.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-lg shadow-md">
               <Clock className="h-12 w-12 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-3">Economia de Tempo</h3>
@@ -142,7 +142,7 @@ function App() {
                 Automatize a coleta e análise de dados, reduzindo em até 40% o tempo gasto em relatórios manuais.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-lg shadow-md">
               <Target className="h-12 w-12 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-3">Visualização Clara de KPIs</h3>
@@ -150,7 +150,7 @@ function App() {
                 Monitore seus indicadores-chave em tempo real com dashboards personalizados e intuitivos.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-lg shadow-md">
               <PieChart className="h-12 w-12 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-3">Relatórios Automatizados</h3>
@@ -158,7 +158,7 @@ function App() {
                 Gere e compartilhe relatórios profissionais automaticamente, programados conforme sua necessidade.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-lg shadow-md">
               <Zap className="h-12 w-12 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-3">Insights em Tempo Real</h3>
@@ -166,7 +166,7 @@ function App() {
                 Acesse dados atualizados instantaneamente, permitindo reações rápidas às mudanças do mercado.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-lg shadow-md">
               <LineChart className="h-12 w-12 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-3">Previsões Avançadas</h3>
@@ -187,13 +187,13 @@ function App() {
               Conheça como diferentes setores utilizam nossa plataforma para impulsionar seus resultados.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/3">
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                  alt="Equipe de vendas" 
+                <img
+                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                  alt="Equipe de vendas"
                   className="rounded-lg w-full h-48 object-cover"
                 />
               </div>
@@ -214,12 +214,12 @@ function App() {
                 </ul>
               </div>
             </div>
-            
+
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/3">
-                <img 
-                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                  alt="Executivo de marketing" 
+                <img
+                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                  alt="Executivo de marketing"
                   className="rounded-lg w-full h-48 object-cover"
                 />
               </div>
@@ -240,12 +240,12 @@ function App() {
                 </ul>
               </div>
             </div>
-            
+
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/3">
-                <img 
-                  src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                  alt="Executivo financeiro" 
+                <img
+                  src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                  alt="Executivo financeiro"
                   className="rounded-lg w-full h-48 object-cover"
                 />
               </div>
@@ -266,12 +266,12 @@ function App() {
                 </ul>
               </div>
             </div>
-            
+
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-1/3">
-                <img 
-                  src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" 
-                  alt="Equipe de produção" 
+                <img
+                  src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                  alt="Equipe de produção"
                   className="rounded-lg w-full h-48 object-cover"
                 />
               </div>
@@ -297,7 +297,7 @@ function App() {
       </section>
 
       {/* Screenshot do Produto */}
-      <section id ="nossaPlataforma" className="py-20">
+      <section id="nossaPlataforma" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Nossa Plataforma</h2>
@@ -305,15 +305,15 @@ function App() {
               Interface intuitiva e personalizável para atender às necessidades específicas do seu negócio.
             </p>
           </div>
-          
+
           <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" 
-              alt="Dashboard em uso" 
+            <img
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
+              alt="Dashboard em uso"
               className="w-full"
             />
           </div>
-          
+
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-bold mb-3">Dashboards Personalizáveis</h3>
@@ -321,14 +321,14 @@ function App() {
                 Crie painéis sob medida para cada departamento e necessidade específica do seu negócio.
               </p>
             </div>
-            
+
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-bold mb-3">Integração Completa</h3>
               <p className="text-gray-600">
                 Conecte-se com mais de 50 fontes de dados diferentes, incluindo ERPs, CRMs e plataformas de marketing.
               </p>
             </div>
-            
+
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-bold mb-3">Acesso Mobile</h3>
               <p className="text-gray-600">
@@ -339,7 +339,7 @@ function App() {
         </div>
       </section>
 
-     
+
       {/* Formulário de Contato */}
       <section id="contato" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -350,12 +350,12 @@ function App() {
                 <p className="mb-8">
                   Estamos prontos para ajudar sua empresa a transformar dados em resultados concretos. Preencha o formulário e nossa equipe entrará em contato em até 24 horas.
                 </p>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 mr-3 flex-shrink-0" />
-                    <a href="mailto:suporte@institutometamorfose.com.br" className="hover:underline">
-                      suporte@institutometamorfose.com.br
+                    <a href="mailto:ime@institutometamorfose.com.br" className="hover:underline">
+                      ime@institutometamorfose.com.br
                     </a>
                   </div>
                   <div className="flex items-start">
@@ -368,15 +368,15 @@ function App() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="md:w-1/2 p-8 md:p-12">
-                <form 
-                  className="space-y-6" 
-                  action="#" 
+                <form
+                  className="space-y-6"
+                  action="#"
                   method="POST"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    
+
                     const form = e.target as HTMLFormElement;
                     const nome = (form.elements.namedItem('nome') as HTMLInputElement).value;
                     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
@@ -403,12 +403,12 @@ function App() {
                       mensagemDiv.style.minWidth = "200px"; // Define uma largura mínima
                       mensagemDiv.style.maxWidth = "90%"; // Evita que ultrapasse a tela
                       mensagemDiv.style.padding = "15px"; // Melhora o espaçamento interno
-                      
+
                       document.body.appendChild(mensagemDiv);
-                    
+
                       setTimeout(() => mensagemDiv.remove(), 3000);
                     };
-                    
+
                     fetch(webhookUrl, { // Usa o valor do parâmetro WebHoockFormulario
                       method: 'POST',
                       headers: {
@@ -438,37 +438,37 @@ function App() {
                     <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-1">
                       Nome Completo *
                     </label>
-                    <input 
-                      type="text" 
-                      id="nome" 
+                    <input
+                      type="text"
+                      id="nome"
                       name="nome"
-                      required 
+                      required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="Seu nome completo"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       E-mail Corporativo *
                     </label>
-                    <input 
-                      type="email" 
-                      id="email" 
+                    <input
+                      type="email"
+                      id="email"
                       name="email"
-                      required 
+                      required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="seu.email@empresa.com.br"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="telefone" className="block text-sm font-medium text-gray-700 mb-1">
                       Telefone
                     </label>
-                    <input 
-                      type="tel" 
-                      id="telefone" 
+                    <input
+                      type="tel"
+                      id="telefone"
                       name="telefone"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="(00) 00000-0000"
@@ -482,7 +482,7 @@ function App() {
                       onInput={(e) => {
                         let value = (e.target as HTMLInputElement).value;
                         value = value.replace(/\D/g, '');
-                        
+
                         if (value.length <= 11) {
                           value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
                           value = value.replace(/(\d)(\d{4})$/, '$1-$2');
@@ -491,53 +491,53 @@ function App() {
                           value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
                           value = value.replace(/(\d)(\d{4})$/, '$1-$2');
                         }
-                        
+
                         (e.target as HTMLInputElement).value = value;
                       }}
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="empresa" className="block text-sm font-medium text-gray-700 mb-1">
                       Ramo de Atuação *
                     </label>
-                    <input 
-                      type="text" 
-                      id="empresa" 
+                    <input
+                      type="text"
+                      id="empresa"
                       name="empresa"
-                      required 
+                      required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic"
                       placeholder="Alimentação, Saúde, Logisitca ..."
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="observacoes" className="block text-sm font-medium text-gray-700 mb-1">
                       Observações
                     </label>
-                    <textarea 
-                      id="observacoes" 
+                    <textarea
+                      id="observacoes"
                       name="observacoes"
                       rows={4}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder:italic resize-none"
                       placeholder="O que precisa? Quais dúvidas? ..."
                     />
                   </div>
-                  
+
                   <div className="flex items-start">
-                    <input 
-                      type="checkbox" 
-                      id="privacidade" 
-                      required 
+                    <input
+                      type="checkbox"
+                      id="privacidade"
+                      required
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1 mr-2"
                     />
                     <label htmlFor="privacidade" className="text-sm text-gray-600">
                       Concordo com a <Link to="/privacy" className="text-blue-600 hover:underline">Política de Privacidade</Link> e com o recebimento de comunicações.
                     </label>
                   </div>
-                  
-                  <button 
-                    type="submit" 
+
+                  <button
+                    type="submit"
                     className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors"
                   >
                     Solicitar Demonstração
@@ -558,8 +558,8 @@ function App() {
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Agende uma demonstração gratuita e descubra como nossa plataforma pode impulsionar o crescimento do seu negócio.
           </p>
-          <a 
-            href="#contato" 
+          <a
+            href="#contato"
             className="inline-block bg-white text-blue-600 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors text-lg"
           >
             Entre em contato com nossa equipe
@@ -574,11 +574,11 @@ function App() {
 
             <div>
               <div className="flex items-center mb-4">
-              <img 
-              src="/assets/dashvision-logo.svg" 
-              alt="DashVision Logo" 
-              className="h-8 w-auto"
-            />
+                <img
+                  src="/assets/dashvision-logo.svg"
+                  alt="DashVision Logo"
+                  className="h-8 w-auto"
+                />
                 <span className="ml-2 text-xl font-bold">DashVision</span>
               </div>
               <p className="text-gray-400 mb-4">
@@ -586,8 +586,8 @@ function App() {
               </p>
               <div className="flex items-center space-x-4 mb-4">
                 <Mail className="h-5 w-5 text-gray-400" />
-                <a href="mailto:suporte@institutometamorfose.com.br" className="text-gray-400 hover:text-white">
-                  suporte@institutometamorfose.com.br
+                <a href="mailto:ime@institutometamorfose.com.br" className="text-gray-400 hover:text-white">
+                  ime@institutometamorfose.com.br
                 </a>
               </div>
               <div className="flex space-x-4">
@@ -606,7 +606,7 @@ function App() {
               </div>
             </div>
 
-<div> </div>
+            <div> </div>
             <div>
               <h3 className="text-lg font-bold mb-4">Empresa</h3>
               <ul className="space-y-2">
@@ -616,7 +616,7 @@ function App() {
 
               </ul>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-bold mb-4">Legal</h3>
               <ul className="space-y-2">
@@ -624,9 +624,9 @@ function App() {
                 <li><Link to="/privacy" className="text-gray-400 hover:text-white">Política de Privacidade</Link></li>
               </ul>
             </div>
-     
+
           </div>
-          
+
           <div className="pt-8 border-t border-gray-700 text-center text-gray-400">
             <p>&copy; 2025 DashVision. Todos os direitos reservados.</p>
           </div>

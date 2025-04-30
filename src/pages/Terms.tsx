@@ -1,6 +1,7 @@
-import { ArrowLeft, FileText, FormInput } from 'lucide-react';
+import { FileText, FormInput } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export function Terms() {
   const navigate = useNavigate();
@@ -24,27 +25,20 @@ export function Terms() {
     <div className="min-h-screen bg-white">
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <img 
-              src="/assets/dashvision-logo.svg" 
-              alt="DashVision Logo" 
+          <Link to="/" className="flex items-center">
+            <img
+              src="/assets/dashvision-logo.svg"
+              alt="DashVision Logo"
               className="h-8 w-auto"
             />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
-          </div>
+          </Link>
         </div>
       </header>
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
         <div className="container mx-auto px-4">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center text-white hover:text-gray-200 mb-8"
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            Voltar
-          </button>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Termos de Uso | DashVision</h1>
           <p className="text-xl mb-4">Estabelecendo uma relação transparente com nossos usuários.</p>
         </div>
