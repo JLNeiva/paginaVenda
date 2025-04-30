@@ -27,14 +27,14 @@ export function Terms() {
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
+        <Link to="/" className="flex items-center">
             <img
               src="/assets/dashvision-logo.svg"
               alt="DashVision Logo"
               className="h-8 w-auto"
             />
             <span className="ml-2 text-xl font-bold text-gray-800">DashVision</span>
-          </div>
+          </Link>
           <nav className="hidden md:flex space-x-8">
             <Link to="/about" className="text-gray-600 hover:text-blue-600 font-medium">Sobre nós</Link>
             <a onClick={() => handleSectionNavigation('beneficios')} className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">Benefícios</a>
