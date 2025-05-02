@@ -5,6 +5,7 @@ import { Settings } from './pages/Settings';
 import { Dashboard } from './pages/Dashboard';
 import { Privacy } from './pages/Privacy';
 import { About } from './pages/About';
+import { ResetPassword } from './pages/ResetPassword';
 
 export function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export function AppRoutes() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

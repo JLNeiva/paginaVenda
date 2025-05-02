@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { LogOut, User, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 
-export function AuthButton() {
+interface AuthButtonProps {
+  initialShowForm?: boolean;
+}
+
+export function AuthButton({ initialShowForm = false }: AuthButtonProps) {
   const navigate = useNavigate();
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(initialShowForm);
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +19,7 @@ export function AuthButton() {
   const [user, setUser] = useState<any>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -30,6 +35,10 @@ export function AuthButton() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    setShowForm(initialShowForm);
+  }, [initialShowForm]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,6 +99,28 @@ export function AuthButton() {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      alert('Email de recuperação enviado! Verifique sua caixa de entrada.');
+      setIsForgotPassword(false);
+      setShowForm(false);
+    } catch (error: any) {
+      setError('Erro ao enviar email de recuperação. Verifique o email informado.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -145,7 +176,7 @@ export function AuthButton() {
             >
               <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4" role="dialog" aria-modal="true">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">
-                  {isRegistering ? 'Criar Conta' : 'Login'}
+                  {isRegistering ? 'Criar Conta' : isForgotPassword ? 'Recuperar Senha' : 'Login'}
                 </h2>
                 
                 {error && (
@@ -155,14 +186,14 @@ export function AuthButton() {
                   </div>
                 )}
 
-                <form onSubmit={handleAuth} className="space-y-4">
+                <form onSubmit={isForgotPassword ? handleForgotPassword : handleAuth} className="space-y-4">
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="auth-email" className="block text-sm font-medium text-gray-700">
                       Email
                     </label>
                     <input
                       type="email"
-                      id="email"
+                      id="auth-email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -173,66 +204,70 @@ export function AuthButton() {
                     />
                   </div>
                   
-                  <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                      Senha
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={loading}
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-gray-100"
-                        placeholder="••••••••"
-                        aria-describedby={error ? "auth-error" : undefined}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {isRegistering && (
-                    <div>
-                      <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
-                        Confirmar Senha
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showConfirmPassword ? "text" : "password"}
-                          id="passwordConfirm"
-                          value={passwordConfirm}
-                          onChange={(e) => setPasswordConfirm(e.target.value)}
-                          required
-                          disabled={loading}
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-gray-100"
-                          placeholder="••••••••"
-                          aria-describedby={error ? "auth-error" : undefined}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                        >
-                          {showConfirmPassword ? (
-                            <EyeOff className="h-4 w-4" />
-                          ) : (
-                            <Eye className="h-4 w-4" />
-                          )}
-                        </button>
+                  {!isForgotPassword && (
+                    <>
+                      <div>
+                        <label htmlFor="auth-password" className="block text-sm font-medium text-gray-700">
+                          Senha
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            id="auth-password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            disabled={loading}
+                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-gray-100"
+                            placeholder="••••••••"
+                            aria-describedby={error ? "auth-error" : undefined}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
                       </div>
-                    </div>
+
+                      {isRegistering && (
+                        <div>
+                          <label htmlFor="auth-passwordConfirm" className="block text-sm font-medium text-gray-700">
+                            Confirmar Senha
+                          </label>
+                          <div className="relative">
+                            <input
+                              type={showConfirmPassword ? "text" : "password"}
+                              id="auth-passwordConfirm"
+                              value={passwordConfirm}
+                              onChange={(e) => setPasswordConfirm(e.target.value)}
+                              required
+                              disabled={loading}
+                              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-gray-100"
+                              placeholder="••••••••"
+                              aria-describedby={error ? "auth-error" : undefined}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            >
+                              {showConfirmPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   <button
@@ -243,26 +278,55 @@ export function AuthButton() {
                     {loading ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        <span>{isRegistering ? 'Criando conta...' : 'Entrando...'}</span>
+                        <span>
+                          {isForgotPassword
+                            ? 'Enviando...'
+                            : isRegistering
+                            ? 'Criando conta...'
+                            : 'Entrando...'}
+                        </span>
                       </>
                     ) : (
-                      <span>{isRegistering ? 'Criar Conta' : 'Entrar'}</span>
+                      <span>
+                        {isForgotPassword
+                          ? 'Enviar email de recuperação'
+                          : isRegistering
+                          ? 'Criar Conta'
+                          : 'Entrar'}
+                      </span>
                     )}
                   </button>
 
-                  <div className="text-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsRegistering(!isRegistering);
-                        setError('');
-                      }}
-                      className="text-sm text-blue-600 hover:text-blue-800"
-                    >
-                      {isRegistering
-                        ? 'Já tem uma conta? Faça login'
-                        : 'Não tem uma conta? Cadastre-se'}
-                    </button>
+                  <div className="text-center space-y-2">
+                    {!isForgotPassword && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsRegistering(!isRegistering);
+                          setError('');
+                        }}
+                        className="text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        {isRegistering
+                          ? 'Já tem uma conta? Faça login'
+                          : 'Não tem uma conta? Cadastre-se'}
+                      </button>
+                    )}
+                    
+                    {!isRegistering && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsForgotPassword(!isForgotPassword);
+                          setError('');
+                        }}
+                        className="text-sm text-blue-600 hover:text-blue-800 block w-full"
+                      >
+                        {isForgotPassword
+                          ? 'Voltar ao login'
+                          : 'Esqueceu sua senha?'}
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>
