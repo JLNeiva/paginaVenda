@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { LogOut, User, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
+import { exibirMensagem } from '../utils/exibirMensagem';
 
 interface AuthButtonProps {
   initialShowForm?: boolean;
@@ -63,7 +64,8 @@ export function AuthButton({ initialShowForm = false }: AuthButtonProps) {
         
         if (error) throw error;
         
-        alert('Cadastro realizado com sucesso! Verifique seu email para continuar.');
+       // alert('Cadastro realizado com sucesso! Verifique seu email para continuar.');
+        exibirMensagem("Cadastro realizado com sucesso! Verifique seu email para continuar.", "#ADD8E6");
         setShowForm(false);
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -111,7 +113,8 @@ export function AuthButton({ initialShowForm = false }: AuthButtonProps) {
 
       if (error) throw error;
 
-      alert('Email de recuperação enviado! Verifique sua caixa de entrada.');
+      // alert('Email de recuperação enviado! Verifique sua caixa de entrada.');
+      exibirMensagem("Email de recuperação enviado! Verifique sua caixa de entrada.", "#ADD8E6");
       setIsForgotPassword(false);
       setShowForm(false);
     } catch (error: any) {

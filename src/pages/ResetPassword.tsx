@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { exibirMensagem } from '../utils/exibirMensagem';
 
 export function ResetPassword() {
   const [password, setPassword] = useState('');
@@ -27,7 +28,8 @@ export function ResetPassword() {
       if (error) throw error;
 
       await supabase.auth.signOut(); // Adicionar logout
-      alert('Senha atualizada com sucesso! Faça login com sua nova senha.');
+    //  alert('Senha atualizada com sucesso! Faça login com sua nova senha.');
+      exibirMensagem("Senha atualizada com sucesso! Faça login com sua nova senha.", "#ADD8E6");
       navigate('/', { 
         replace: true, // Usar replace para substituir a entrada no histórico
         state: { showLoginForm: true } 

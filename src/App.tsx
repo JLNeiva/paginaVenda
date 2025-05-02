@@ -18,6 +18,7 @@ import {
 import { AuthButton } from './components/AuthButton';
 import { supabase } from './lib/supabase';
 import { Link } from 'react-router-dom';
+import { exibirMensagem } from "./utils/exibirMensagem";
 
 function App() {
   const [webhookUrl, setWebhookUrl] = useState('');
@@ -395,7 +396,7 @@ function App() {
                     const empresa = (form.elements.namedItem('empresa') as HTMLInputElement).value;
                     const observacoes = (form.elements.namedItem('observacoes') as HTMLTextAreaElement).value;
 
-                    const exibirMensagem = (mensagem: string, cor: string) => {
+                 /*   const exibirMensagem = (mensagem: string, cor: string) => {
                       const mensagemDiv = document.createElement("div");
                       mensagemDiv.innerText = mensagem;
                       mensagemDiv.style.position = "fixed";
@@ -418,7 +419,7 @@ function App() {
                       document.body.appendChild(mensagemDiv);
 
                       setTimeout(() => mensagemDiv.remove(), 3000);
-                    };
+                    }; */
 
                     fetch(webhookUrl, { // Usa o valor do parâmetro WebHoockFormulario
                       method: 'POST',
