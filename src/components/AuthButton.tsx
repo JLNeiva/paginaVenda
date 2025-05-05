@@ -114,7 +114,7 @@ export function AuthButton({ initialShowForm = false }: AuthButtonProps) {
       if (error) throw error;
 
       // alert('Email de recuperação enviado! Verifique sua caixa de entrada.');
-      exibirMensagem("Email de recuperação enviado! Verifique sua caixa de entrada.", "#ADD8E6");
+      exibirMensagem("Email de recuperação enviado para " + email + "! Verifique sua caixa de entrada.", "#ADD8E6");
       setIsForgotPassword(false);
       setShowForm(false);
     } catch (error: any) {

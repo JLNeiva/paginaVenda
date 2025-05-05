@@ -396,31 +396,6 @@ function App() {
                     const empresa = (form.elements.namedItem('empresa') as HTMLInputElement).value;
                     const observacoes = (form.elements.namedItem('observacoes') as HTMLTextAreaElement).value;
 
-                 /*   const exibirMensagem = (mensagem: string, cor: string) => {
-                      const mensagemDiv = document.createElement("div");
-                      mensagemDiv.innerText = mensagem;
-                      mensagemDiv.style.position = "fixed";
-                      mensagemDiv.style.top = "20px";
-                      mensagemDiv.style.left = "50%";
-                      mensagemDiv.style.transform = "translateX(-50%)";
-                      mensagemDiv.style.background = cor;
-                      mensagemDiv.style.color = "#555";
-                      mensagemDiv.style.padding = "10px 20px";
-                      mensagemDiv.style.borderRadius = "5px";
-                      mensagemDiv.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
-                      mensagemDiv.style.zIndex = "9999"; // Garante que fica acima de outros elementos
-                      mensagemDiv.style.fontSize = "16px"; // Ajusta a fonte para melhor visualização
-                      mensagemDiv.style.fontWeight = "bold";
-                      mensagemDiv.style.textAlign = "center";
-                      mensagemDiv.style.minWidth = "200px"; // Define uma largura mínima
-                      mensagemDiv.style.maxWidth = "90%"; // Evita que ultrapasse a tela
-                      mensagemDiv.style.padding = "15px"; // Melhora o espaçamento interno
-
-                      document.body.appendChild(mensagemDiv);
-
-                      setTimeout(() => mensagemDiv.remove(), 3000);
-                    }; */
-
                     fetch(webhookUrl, { // Usa o valor do parâmetro WebHoockFormulario
                       method: 'POST',
                       headers: {
