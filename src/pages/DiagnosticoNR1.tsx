@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ClipboardCheck, ArrowLeft, Phone, Download, X } from 'lucide-react';
+import { ClipboardCheck, ArrowLeft, Phone, ExternalLink, X } from 'lucide-react';
 import { AuthButton } from '../components/AuthButton';
-import { jsPDF } from 'jspdf';
 
 interface FormData {
   nome: string;
@@ -177,8 +176,10 @@ export function DiagnosticoNR1() {
 
   const enviarWebhook = async (dados: FormData, resultado: any) => {
     const webhookUrl = 'https://n8n.dashvision.com.br/webhook/26e0a4f6-0f5f-487d-a03f-9969a98f8b5f';
-
-    // Criar conteúdo formatado para email usando HTML
+    
+    // URL absoluta do PDF usando o domínio atual
+    const pdfUrl = `${window.location.protocol}//${window.location.host}/assets/DiagnosticoNR1-PassoAPasso.pdf`;
+    
     const emailContent = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6;">
   <h2 style="color: #2563eb;">Novo Diagnóstico NR1 recebido</h2>
@@ -210,10 +211,27 @@ export function DiagnosticoNR1() {
     <p style="margin-top: 10px;">${resultado.descricao}</p>
   </div>
 
+  <div style="margin: 20px 0; padding: 20px; background-color: #f0f7ff; border-radius: 8px; text-align: center;">
+    <p style="margin-bottom: 15px; color: #1e40af;">
+      Para ajudar na implementação das melhorias, acesse nosso guia completo:
+    </p>
+    <a href="${pdfUrl}" 
+       target="_blank" 
+       style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 25px; 
+              text-decoration: none; border-radius: 6px; font-weight: bold;">
+      Abrir passo a passo de implementação da NR-1
+    </a>
+  </div>
+
   <p style="color: #64748b; margin-top: 20px;">
     Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
   </p>
 </div>`;
+
+    // Criar string com respostas ordenadas
+    const respostasOrdenadas = QUESTOES
+      .map(questao => `${questao.id}-${dados.respostas[questao.id]}`)
+      .join(' ');
 
     try {
       const response = await fetch(webhookUrl, {
@@ -222,8 +240,15 @@ export function DiagnosticoNR1() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          nome: dados.nome, // Campo adicional para o título do email
-          emailContent: emailContent // O resto do conteúdo permanece igual
+          nome: dados.nome,
+          telefone: dados.telefone,
+          email: dados.email,
+          respostas: respostasOrdenadas,
+          resultado_pontos: resultado.pontos,
+          resultado_nivel: resultado.nivel,
+          resultado_mensagem: resultado.descricao,
+          pdfUrl: pdfUrl,
+          emailContent: emailContent
         })
       });
 
@@ -236,6 +261,22 @@ export function DiagnosticoNR1() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Verificar campos do formulário
+    if (!formData.nome.trim() || !formData.email.trim() || 
+        !formData.empresa.trim() || !formData.telefone.trim()) {
+      alert('Por favor, preencha todos os campos do formulário.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // Verificar formato do email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(formData.email)) {
+      alert('Por favor, insira um e-mail válido.');
+      document.getElementById('email')?.focus();
+      return;
+    }
 
     // Verificar respostas em branco
     const questoesSemResposta = QUESTOES.filter(questao => !formData.respostas[questao.id]);
@@ -287,93 +328,8 @@ export function DiagnosticoNR1() {
   };
 
   const handleGerarPDF = () => {
-    if (!resultado) return;
-
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    
-    // Configurações iniciais
-    doc.setFont("helvetica");
-    
-    // Data e Hora
-    const dataHora = new Date().toLocaleString('pt-BR', { 
-      timeZone: 'America/Sao_Paulo',
-      dateStyle: 'full',
-      timeStyle: 'long'
-    });
-    doc.setFontSize(10);
-    doc.text(`Data/Hora: ${dataHora}`, 20, 20);
-    
-    // Título
-    doc.setFontSize(20);
-    doc.text("Diagnóstico NR1", pageWidth / 2, 35, { align: "center" });
-    
-    // Layout de duas colunas com imagem menor
-    const colWidth = (pageWidth - 40) / 2;
-    
-    // Adicionar imagem mantendo proporção mas com tamanho reduzido
-    const img = document.querySelector('img[alt="Diagnóstico NR1"]') as HTMLImageElement;
-    if (img) {
-      const imgRatio = img.naturalWidth / img.naturalHeight;
-      const imgWidth = colWidth * 0.8; // Reduzido para 80% da largura da coluna
-      const imgHeight = imgWidth / imgRatio;
-      doc.addImage(img, 'PNG', 20, 45, imgWidth, imgHeight, undefined, 'FAST');
-    }
-    
-    // Dados do Formulário na coluna direita
-    doc.setFontSize(12);
-    doc.text("Dados do Participante:", pageWidth/2 + 10, 50);
-    doc.setFontSize(10);
-    doc.text(`Nome: ${formData.nome}`, pageWidth/2 + 15, 60);
-    doc.text(`Email: ${formData.email}`, pageWidth/2 + 15, 67);
-    doc.text(`Empresa: ${formData.empresa}`, pageWidth/2 + 15, 74);
-    doc.text(`Telefone: ${formData.telefone}`, pageWidth/2 + 15, 81);
-
-    // Respostas começando mais abaixo para não sobrepor a imagem
-    doc.setFontSize(12);
-    doc.text("Respostas:", 20, 160);
-    let yPos = 170;
-
-    QUESTOES.forEach((questao, index) => {
-      if (yPos > 270) {
-        doc.addPage();
-        yPos = 20;
-      }
-      
-      doc.setFontSize(10);
-      doc.text(`${index + 1}. ${questao.titulo}`, 25, yPos);
-      yPos += 7;
-      
-      const resposta = formData.respostas[questao.id];
-      if (resposta) {
-        doc.text(`Resposta: ${resposta} - ${questao.opcoes[resposta as keyof typeof questao.opcoes]}`, 30, yPos);
-      }
-      yPos += 12;
-    });
-    
-    // Resultado Final
-    if (yPos > 250) {
-      doc.addPage();
-      yPos = 20;
-    }
-    
-    doc.setFontSize(14);
-    doc.text("Resultado da Avaliação", pageWidth / 2, yPos, { align: "center" });
-    yPos += 10;
-    
-    doc.setFontSize(12);
-    doc.text(`Nível: ${resultado.nivel}`, 20, yPos);
-    yPos += 7;
-    
-    // Quebrar descrição em linhas
-    const splitDesc = doc.splitTextToSize(resultado.descricao, pageWidth - 40);
-    doc.text(splitDesc, 20, yPos);
-    yPos += splitDesc.length * 7 + 7;
-    
-    doc.text(`Pontuação Total: ${resultado.pontos} pontos`, 20, yPos);
-    
-    // Salvar PDF
-    doc.save('diagnostico-nr1.pdf');
+    const pdfUrl = `/assets/DiagnosticoNR1-PassoAPasso.pdf`;
+    window.open(pdfUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -505,7 +461,7 @@ export function DiagnosticoNR1() {
                 type="submit"
                 className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Avaliar Resultado
+                Ver resultado e o passo a passo de implementação da NR-1
               </button>
             </form>
           </div>
@@ -528,6 +484,7 @@ export function DiagnosticoNR1() {
               <p className="text-xl font-semibold text-blue-600">{resultado.nivel}</p>
               <p className="text-gray-600">{resultado.descricao}</p>
               <p className="text-lg">Pontuação Total: <span className="font-bold">{resultado.pontos}</span></p>
+              <p className="text-sm text-gray-500 italic">✉️ Enviamos um e-mail com o diagnóstico completo e recomendações</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -535,8 +492,8 @@ export function DiagnosticoNR1() {
                 onClick={handleGerarPDF}
                 className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
               >
-                <Download className="h-5 w-5" />
-                Baixar PDF
+                <ExternalLink className="h-5 w-5" />
+                Abrir PDF
               </button>
               <button
                 onClick={() => {
