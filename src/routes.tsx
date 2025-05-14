@@ -6,6 +6,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Privacy } from './pages/Privacy';
 import { About } from './pages/About';
 import { ResetPassword } from './pages/ResetPassword';
+import { DiagnosticoNR1 } from './pages/DiagnosticoNR1';
 
 export function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ export function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/diagnosticonr1" element={<DiagnosticoNR1 />} />
       </Routes>
     </BrowserRouter>
   );
