@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ClipboardCheck, ArrowLeft, Phone, ExternalLink, X } from 'lucide-react';
-import { AuthButton } from '../components/AuthButton';
+import { ExternalLink, X } from 'lucide-react';
+// Removed unused import: AuthButton
 
 interface FormData {
   nome: string;
