@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melhorias para Atenção Básica - Serviços de Saúde</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 15px;
+            border-left: 6px solid #28a745;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #28a745;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #28a745;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .priority-box {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .priority-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+        
+        .action-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .action-card h4 {
+            color: #28a745;
+            font-size: 1.3em;
+            margin: 0 0 15px 0;
+            border-bottom: 2px solid #f8f9fa;
+            padding-bottom: 8px;
+        }
+        
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .step-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #28a745;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .important {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border: 2px solid #fdcb6e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .important h4 {
+            color: #d63031;
+            margin: 0 0 10px 0;
+            font-size: 1.4em;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .kpi-card {
+            background: white;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .kpi-card h5 {
+            color: #28a745;
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        .kpi-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            background: #28a745;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 2.2em; }
+            .section { padding: 20px; }
+            .kpi-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏥 Melhorias para Atenção Básica</h1>
+        <div class="subtitle">Estratégias para Aprimorar os Serviços de Saúde nos Postos</div>
+    </div>
+
+    <div class="priority-box">
+        <h3>🚨 ÁREA PRIORITÁRIA IDENTIFICADA</h3>
+        <p>Serviços de Saúde - Necessita atenção imediata para melhorar a qualidade do atendimento aos usuários</p>
+    </div>
+
+    <div class="section">
+        <h2>1. Melhoria da Satisfação dos Usuários</h2>
+        
+        <div class="action-card">
+            <h4>🎯 Implementar Sistema de Feedback dos Usuários</h4>
+            <ul class="step-list">
+                <li>Criar caixas de sugestões em todos os postos de saúde</li>
+                <li>Implementar pesquisas de satisfação mensais</li>
+                <li>Estabelecer comitê de melhoria contínua</li>
+                <li>Criar canal digital para reclamações e sugestões</li>
+                <li>Implementar reuniões mensais de análise de feedback</li>
+            </ul>
+        </div>
+
+        <div class="action-card">
+            <h4>⏰ Reduzir Tempo de Espera</h4>
+            <ul class="step-list">
+                <li>Implementar sistema de agendamento online</li>
+                <li>Criar triagem mais eficiente na recepção</li>
+                <li>Estabelecer protocolos de tempo máximo de espera</li>
+                <li>Implementar painéis informativos sobre tempo de espera</li>
+                <li>Criar sistema de priorização por urgência</li>
+            </ul>
+        </div>
+
+        <div class="action-card">
+            <h4>🤝 Humanização do Atendimento</h4>
+            <ul class="step-list">
+                <li>Treinar equipe em comunicação empática</li>
+                <li>Criar protocolos de acolhimento humanizado</li>
+                <li>Implementar programa de melhoria do ambiente físico</li>
+                <li>Estabelecer código de conduta para profissionais</li>
+                <li>Criar sistema de reconhecimento para boas práticas</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Ampliação e Qualificação dos Serviços</h2>
+        
+        <div class="action-card">
+            <h4>🏥 Expansão de Especialidades</h4>
+            <ul class="step-list">
+                <li>Mapear demandas não atendidas na região</li>
+                <li>Implementar teleconsultas com especialistas</li>
+                <li>Criar parcerias com hospitais regionais</li>
+                <li>Estabelecer agenda de especialistas itinerantes</li>
+                <li>Implementar centro de referência regional</li>
+            </ul>
+        </div>
+
+        <div class="action-card">
+            <h4>🕐 Ampliação de Horários</h4>
+            <ul class="step-list">
+                <li>Implementar funcionamento noturno estendido</li>
+                <li>Criar plantão de finais de semana</li>
+                <li>Estabelecer horários especiais para trabalhadores</li>
+                <li>Implementar agendamento fora do horário comercial</li>
+                <li>Criar sistema de urgência 24h em postos estratégicos</li>
+            </ul>
+        </div>
+
+        <div class="action-card">
+            <h4>🔬 Melhoria de Exames e Procedimentos</h4>
+            <ul class="step-list">
+                <li>Implementar laboratório básico nos postos</li>
+                <li>Criar central de agendamento de exames</li>
+                <li>Estabelecer parcerias para exames especializados</li>
+                <li>Implementar pequenos procedimentos ambulatoriais</li>
+                <li>Criar sistema de resultados online</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="important">
+        <h4>⚡ AÇÃO IMEDIATA RECOMENDADA</h4>
+        <p>Implementar pesquisa de satisfação e criar comitê de melhoria nos próximos 30 dias. Isso permitirá identificar problemas específicos e priorizar ações de melhoria.</p>
+    </div>
+
+    <div class="section">
+        <h2>3. Indicadores de Monitoramento</h2>
+        
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <h5>Taxa de Satisfação</h5>
+                <div class="kpi-value">85%</div>
+                <p>Meta mínima para satisfação geral dos usuários</p>
+            </div>
+            <div class="kpi-card">
+                <h5>Tempo Médio de Espera</h5>
+                <div class="kpi-value">30min</div>
+                <p>Tempo máximo aceitável para consultas</p>
+            </div>
+            <div class="kpi-card">
+                <h5>Cobertura Populacional</h5>
+                <div class="kpi-value">95%</div>
+                <p>Meta de cobertura da Estratégia Saúde da Família</p>
+            </div>
+            <div class="kpi-card">
+                <h5>Resolutividade</h5>
+                <div class="kpi-value">80%</div>
+                <p>Problemas resolvidos na atenção básica</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. Cronograma de Implementação</h2>
+        
+        <div class="action-card">
+            <h4>📅 Primeiros 30 dias</h4>
+            <ul class="step-list">
+                <li>Implementar pesquisa de satisfação</li>
+                <li>Criar comitê de melhoria</li>
+                <li>Mapear principais problemas</li>
+                <li>Estabelecer metas iniciais</li>
+            </ul>
+        </div>
+
+        <div class="action-card">
+            <h4>📅 Primeiros 90 dias</h4>
+            <ul class="step-list">
+                <li>Implementar melhorias de processo</li>
+                <li>Treinar equipe em humanização</li>
+                <li>Criar sistema de agendamento</li>
+                <li>Estabelecer parcerias estratégicas</li>
+            </ul>
+        </div>
+
+        <div class="action-card">
+            <h4>📅 Primeiros 6 meses</h4>
+            <ul class="step-list">
+                <li>Expandir horários de funcionamento</li>
+                <li>Implementar novos serviços</li>
+                <li>Avaliar resultados e ajustar estratégias</li>
+                <li>Planejar expansões futuras</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>🎯 Objetivo:</strong> Transformar a atenção básica em referência de qualidade e resolutividade para a população</p>
+    </div>
+</body>
+</html>
