@@ -51,12 +51,15 @@ const EMAIL_TEMPLATE = `
 Nome: %nome, sua avaliação foi concluída!
 
 Resultado por pilar:
-- Serviços Médicos: %pilar1 pontos
-- Protocolos de Atendimento Médico: %pilar2 pontos  
-- Educação Médica Continuada: %pilar3 pontos
+- Serviços Médicos: %pontos_pilar1 pontos
+- Protocolos de Atendimento Médico: %pontos_pilar2 pontos  
+- Educação Médica Continuada: %pontos_pilar3 pontos
 
-Área de maior necessidade: %areaPrioritaria
+Área de maior necessidade: %pilar_menor
 Plano de ação recomendado: %pdfRecomendado
+
+Município: %municipio - %uf
+Telefone: %telefone
 
 Atenciosamente,
 Equipe DashVision Healthcare Solutions
@@ -400,7 +403,8 @@ export function AvaliacaoAtencaoBasica() {
       .replace(/%pontos_pilar2/g, pontuacaoPilares[2].toString())
       .replace(/%pontos_pilar3/g, pontuacaoPilares[3].toString())
       .replace(/%pilar_menor/g, pilarMenor.nome)
-      .replace(/%nota_menor/g, pilarMenor.pontos.toString());
+      .replace(/%nota_menor/g, pilarMenor.pontos.toString())
+      .replace(/%pdfRecomendado/g, pilarMenor.pdf);
     
     const pdfUrl = `${window.location.protocol}//${window.location.host}/assets/${pilarMenor.pdf}`;
     
@@ -782,15 +786,24 @@ export function AvaliacaoAtencaoBasica() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          <div className="flex justify-between items-start mb-8">
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-12">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Lado Esquerdo - Imagem */}
+            <div className="w-[220px] sm:w-[260px] md:w-[300px] lg:w-[350px] flex-shrink-0 self-center aspect-[2/3] rounded-lg shadow-md overflow-hidden">
+              <img
+                src="/assets/havaliacaoPostoSaude.png"
+                alt="Avaliação Posto de Saúde"
+                className="w-full h-full object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+
+            {/* Lado Direito - Formulário de Dados */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                DIAGNÓSTICO – AVALIAÇÃO DE OPORTUNIDADES DE MELHORIAS EM POSTOS DE SAÚDE
+              <h1 className="text-3xl font-bold text-gray-800 mb-6">
+                AVALIAÇÃO DE POSTOS DE SAÚDE
               </h1>
-              <p className="text-gray-600 mb-6">
-                Avaliação dos 3 Pilares: Serviços Médicos, Protocolos de Atendimento e Educação Médica
-              </p>
 
               <div className="space-y-6">
                 <div>
@@ -1104,9 +1117,9 @@ export function AvaliacaoAtencaoBasica() {
               </button>
             </div>
             </form>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Modal de Resultado */}
       {showModal && resultado && (
