@@ -45,7 +45,7 @@ const NOMES_PILARES = ["Serviços Médicos", "Protocolos de Atendimento Médico"
 
 // Template configurável para email (você pode editar esta área)
 const EMAIL_TEMPLATE = `Olá, %nome!
-Obrigado por concluir o diagnóstico. Abaixo, seguem os resultados por pilar e a prioridade de atuação:
+Parabéns por concluir o diagnóstico. Abaixo, seguem os resultados por pilar e a prioridade de atuação:
  • Serviços Médicos: %pontos_pilar1 pontos
  • Protocolos de Atendimento: %pontos_pilar2 pontos
  • Educação Médica Continuada: %pontos_pilar3 pontos
