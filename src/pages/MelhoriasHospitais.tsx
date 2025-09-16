@@ -45,25 +45,34 @@ const NOMES_PILARES = ["Serviços Médicos", "Protocolos de Atendimento Médico"
 
 // Template configurável para email (você pode editar esta área)
 const EMAIL_TEMPLATE = `Olá, %nome!
-Parabéns por concluir o diagnóstico. Abaixo, seguem os resultados por pilar e a prioridade de atuação:
+Parabéns por concluir o diagnóstico!
+
+Abaixo, seguem os resultados por pilar e a prioridade de atuação:
+<strong>
  • Serviços Médicos: %pontos_pilar1 pontos
  • Protocolos de Atendimento: %pontos_pilar2 pontos
  • Educação Médica Continuada: %pontos_pilar3 pontos
+</strong>
+Pontuação geral do seu Hospital: <strong>%resultadoPontos (%resultadoNivel)</strong>
 
-Pontuação geral do seu Hospital: %resultadoPontos (%resultadoNivel)
-Prioridade 1: %pilar_menor (%nota_menor pontos)
-Preparamos uma devolutiva objetiva com diretrizes práticas para evoluir esse pilar prioritário — o arquivo segue em anexo para você e sua equipe.
+<strong>Prioridade 1:</strong> %pilar_menor (%nota_menor pontos)
+
+<strong>Preparamos uma devolutiva objetiva com diretrizes práticas para evoluir esse pilar prioritário — o arquivo segue em anexo para você e sua equipe.</strong>
+
 Hospital: %hospital
 Cidade: %cidade - %uf
-Conte com a Rapimed para acelerar a eficiência da sua instituição. Somos o parceiro certo para transformar recomendações em resultados e levar o hospital a um novo patamar de desempenho.
-Nos chame no contato a seguir para conversarmos e desenharmos os próximos passos:
 
-  📞 51 99524-8614.
+Conte com a <strong>Rapimed</strong> para <strong>acelerar a eficiência da sua instituição</strong>.
+Somos o parceiro certo para transformar recomendações em resultados e levar o hospital a um novo patamar de desempenho.
 
-Também podemos agendar através deste e-mail, basta respondê-lo sinalizando a sua disponibilidade.
+<strong>Nos chame no contato a seguir para conversarmos e desenharmos os próximos passos:</strong>
+
+ <strong style="color: #166534;"> 📞 51 99524-8614.</strong>
+
+<strong>Também podemos agendar através deste e-mail, basta respondê-lo sinalizando a sua disponibilidade.</strong>
+
 Um abraço,
-
-Equipe Rapimed
+<strong>Equipe Rapimed</strong>
 `;
 
 const QUESTOES: Questao[] = [
