@@ -30,6 +30,7 @@ type Questao = QuestaoRadio | QuestaoDropdown | QuestaoDropdownMultiplo;
 interface FormData {
   nome: string;
   email: string;
+  cargo: string;
   hospital: string;
   cidade: string;
   uf: string;
@@ -43,21 +44,26 @@ const PRIORIDADE_PILARES = [1, 2, 3]; // Ordem de prioridade em caso de empate
 const NOMES_PILARES = ["Serviços Médicos", "Protocolos de Atendimento Médico", "Educação Médica Continuada"];
 
 // Template configurável para email (você pode editar esta área)
-const EMAIL_TEMPLATE = `
-Nome: %nome, sua avaliação foi concluída!
+const EMAIL_TEMPLATE = `Olá, %nome!
+Obrigado por concluir o diagnóstico. Abaixo, seguem os resultados por pilar e a prioridade de atuação:
+ • Serviços Médicos: %pontos_pilar1 pontos
+ • Protocolos de Atendimento: %pontos_pilar2 pontos
+ • Educação Médica Continuada: %pontos_pilar3 pontos
 
-Resultado por pilar:
-- Serviços Médicos: %pontos_pilar1 pontos
-- Protocolos de Atendimento: %pontos_pilar2 pontos  
-- Educação Médica Continuada: %pontos_pilar3 pontos
-
-A área que precisa de mais atenção é "%pilar_menor" com %nota_menor pontos.
-Por isso, selecionamos o material mais adequado para sua situação.
-
+Pontuação geral do seu Hospital: %resultadoPontos (%resultadoNivel)
+Prioridade 1: %pilar_menor (%nota_menor pontos)
+Preparamos uma devolutiva objetiva com diretrizes práticas para evoluir esse pilar prioritário — o arquivo segue em anexo para você e sua equipe.
 Hospital: %hospital
 Cidade: %cidade - %uf
-Telefone: %telefone
-Tipo: %tipo_formulario
+Conte com a Rapimed para acelerar a eficiência da sua instituição. Somos o parceiro certo para transformar recomendações em resultados e levar o hospital a um novo patamar de desempenho.
+Nos chame no contato a seguir para conversarmos e desenharmos os próximos passos:
+
+  📞 51 99524-8614.
+
+Também podemos agendar através deste e-mail, basta respondê-lo sinalizando a sua disponibilidade.
+Um abraço,
+
+Equipe Rapimed
 `;
 
 const QUESTOES: Questao[] = [
@@ -78,17 +84,18 @@ const QUESTOES: Questao[] = [
   {
     id: 2,
     titulo: "2. Principais problemas enfrentados no plantão",
+
     tipo: "dropdown_multiplo",
     pilar: 1,
     itens: [
       "Furo ou atraso na escala",
-      "Dificuldade em encontrar médico disponível", 
+      "Dificuldade em encontrar médico disponível",
       "Mão de obra desqualificada",
       "Comunicação ineficiente entre corpo clínico e direção"
     ],
     opcoes: {
       "3": "Não ocorre",
-      "2": "Ocorre raramente", 
+      "2": "Ocorre raramente",
       "1": "Ocorre frequentemente",
       "0": "É crítico e recorrente"
     },
@@ -107,7 +114,7 @@ const QUESTOES: Questao[] = [
     opcoes: {
       "3": "Não ocorre",
       "2": "Ocorre raramente",
-      "1": "Ocorre frequentemente", 
+      "1": "Ocorre frequentemente",
       "0": "É crítico e recorrente"
     },
     pontos: { "3": 3, "2": 2, "1": 1, "0": 0 }
@@ -235,12 +242,9 @@ const QUESTOES: Questao[] = [
 
 const calcularPontuacaoPorPilar = (respostas: { [key: string]: string }) => {
   const pontuacaoPilares = { 1: 0, 2: 0, 3: 0 };
-  
   QUESTOES.forEach((questao) => {
     let pontuacaoQuestao = 0;
-    
     if (questao.tipo === 'dropdown_multiplo') {
-      // Para dropdown múltiplo, calcular pontuação baseada em todas as respostas dos itens
       pontuacaoQuestao = questao.itens?.reduce((subtotal, _item, index) => {
         const chaveResposta = `${questao.id}_${index}`;
         const resposta = respostas[chaveResposta];
@@ -250,36 +254,53 @@ const calcularPontuacaoPorPilar = (respostas: { [key: string]: string }) => {
         return subtotal;
       }, 0) || 0;
     } else {
-      // Para radio e dropdown simples
       const resposta = respostas[questao.id.toString()];
       if (resposta && questao.pontos && questao.pontos[resposta as keyof typeof questao.pontos] !== undefined) {
         pontuacaoQuestao = questao.pontos[resposta as keyof typeof questao.pontos] || 0;
       }
     }
-    
     pontuacaoPilares[questao.pilar as keyof typeof pontuacaoPilares] += pontuacaoQuestao;
   });
-  
-  return pontuacaoPilares;
+  // Normalizar para escala de 0 a 10
+  const maximos: { 1: number; 2: number; 3: number } = { 1: 0, 2: 0, 3: 0 };
+  QUESTOES.forEach((questao) => {
+    const pilarKey = questao.pilar as keyof typeof maximos;
+    if (questao.tipo === 'dropdown_multiplo') {
+      maximos[pilarKey] += (questao.itens?.length || 0) * Math.max(...Object.values(questao.pontos));
+    } else {
+      maximos[pilarKey] += Math.max(...Object.values(questao.pontos));
+    }
+  });
+  const normalizados: { 1: number; 2: number; 3: number } = { 1: 0, 2: 0, 3: 0 };
+  Object.keys(pontuacaoPilares).forEach((pilarStr) => {
+    const pilar = Number(pilarStr) as keyof typeof pontuacaoPilares;
+    normalizados[pilar] = maximos[pilar] > 0 ? Number(((pontuacaoPilares[pilar] / maximos[pilar]) * 10).toFixed(1)) : 0;
+  });
+  // String de validação para n8n (igual à outra página)
+  const stringValidacao = `N1 = ${maximos[1]}/${pontuacaoPilares[1]} _ N2 = ${maximos[2]}/${pontuacaoPilares[2]} _ N3 = ${maximos[3]}/${pontuacaoPilares[3]} _ NotaFinal = ${((normalizados[1] + normalizados[2] + normalizados[3]) / 3).toFixed(1)}`;
+  return { ...normalizados, stringValidacao };
+  return normalizados;
 };
 
 const calcularPontuacao = (respostas: { [key: string]: string }) => {
   const pontuacaoPilares = calcularPontuacaoPorPilar(respostas);
-  return pontuacaoPilares[1] + pontuacaoPilares[2] + pontuacaoPilares[3];
+  // Pontuação total é a média dos pilares normalizados
+  const total = (pontuacaoPilares[1] + pontuacaoPilares[2] + pontuacaoPilares[3]) / 3;
+  return Number(total.toFixed(2));
 };
 
 const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) => {
   let menorNota = Math.min(...Object.values(pontuacaoPilares));
-  
+
   // Em caso de empate, usar a prioridade configurada
   for (const pilar of PRIORIDADE_PILARES) {
     if (pontuacaoPilares[pilar] === menorNota) {
       const pdfNames = {
         1: "Melhorias para Serviços Médicos.pdf",
-        2: "Melhorias para Protocolos de Atendimento.pdf", 
+        2: "Melhorias para Protocolos de Atendimento.pdf",
         3: "Melhorias para Educação Médica Continuada.pdf"
       };
-      
+
       return {
         pilar: pilar,
         nome: NOMES_PILARES[pilar - 1],
@@ -288,7 +309,7 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
       };
     }
   }
-  
+
   return {
     pilar: 1,
     nome: NOMES_PILARES[0],
@@ -298,15 +319,15 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
 };
 
 const determinarNivel = (pontos: number) => {
-  if (pontos <= 15) return {
+  if (pontos <= 2.5) return {
     nivel: "Nível 1 - Atenção Urgente",
     descricao: "Necessário implementar urgentemente melhorias estruturais básicas para garantir qualidade e segurança do atendimento."
   };
-  if (pontos <= 30) return {
-    nivel: "Nível 2 - Desenvolvimento Necessário", 
+  if (pontos <= 5) return {
+    nivel: "Nível 2 - Desenvolvimento Necessário",
     descricao: "Estrutura inicial presente, mas requer desenvolvimento significativo em múltiplas áreas para melhor desempenho."
   };
-  if (pontos <= 45) return {
+  if (pontos <= 7.5) return {
     nivel: "Nível 3 - Bom Desempenho",
     descricao: "Boa base estabelecida com oportunidades claras de otimização e padronização de processos."
   };
@@ -320,6 +341,7 @@ export function MelhoriasHospitais() {
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     email: '',
+    cargo: '',
     hospital: '',
     cidade: '',
     uf: '',
@@ -335,10 +357,14 @@ export function MelhoriasHospitais() {
 
   const enviarWebhook = async (dados: FormData, resultado: any, pontuacaoPilares: any, pilarMenor: any) => {
     const webhookUrl = 'https://n8n.dashvision.com.br/webhook/melhorias-hospitais';
-    
+
+    const logoUrl = "https://drive.google.com/uc?export=view&id=1SqLnVdjDD6QPCJ0iFfbB61fF4rLHl9xu";
+    //`${window.location.protocol}//${window.location.host}/assets/logo.jpeg`;
     // Substituir variáveis no template
     const emailPersonalizado = EMAIL_TEMPLATE
+      .replace(/%logoUrl/g, logoUrl)
       .replace(/%nome/g, dados.nome)
+      .replace(/%cargo/g, dados.cargo)
       .replace(/%hospital/g, dados.hospital)
       .replace(/%cidade/g, dados.cidade)
       .replace(/%uf/g, dados.uf)
@@ -348,43 +374,33 @@ export function MelhoriasHospitais() {
       .replace(/%pontos_pilar2/g, pontuacaoPilares[2].toString())
       .replace(/%pontos_pilar3/g, pontuacaoPilares[3].toString())
       .replace(/%pilar_menor/g, pilarMenor.nome)
-      .replace(/%nota_menor/g, pilarMenor.pontos.toString());
-    
+      .replace(/%nota_menor/g, pilarMenor.pontos.toString())
+      .replace(/%resultadoNivel/g, resultado.nivel.toString())
+      .replace(/%resultadoPontos/g, resultado.pontos.toString());
+
     const pdfUrl = `${window.location.protocol}//${window.location.host}/assets/MelhoriasHospitais-PassoAPasso.pdf`;
-    
+
     const emailContent = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-  <h2 style="color: #2563eb;">Nova Avaliação de Melhorias Hospitalares recebida</h2>
-  
-  <div style="margin: 20px 0; padding: 15px; background-color: #f8fafc; border-radius: 8px;">
+   
+  <div style="margin: 8px 0; padding: 15px; background-color: #f8fafc; border-radius: 8px; line-height: 1.2;">
     <h3 style="color: #1e40af;">Dados do Participante:</h3>
     <p><strong>Nome:</strong> ${dados.nome}</p>
     <p><strong>Email:</strong> ${dados.email}</p>
-    <p><strong>Hospital:</strong> ${dados.hospital}</p>
+  <p><strong>Cargo Atual:</strong> ${dados.cargo}</p>
+  <p><strong>Hospital:</strong> ${dados.hospital}</p>
     <p><strong>Cidade:</strong> ${dados.cidade} - ${dados.uf}</p>
     <p><strong>Telefone:</strong> ${dados.telefone}</p>
-    <p><strong>Tipo:</strong> ${TIPO_FORMULARIO}</p>
   </div>
 
-  <div style="margin: 20px 0; padding: 15px; background-color: #f0f9ff; border-radius: 8px;">
-    <h3 style="color: #1e40af;">Resultado da Avaliação:</h3>
-    <p><strong>Pontuação Total:</strong> ${resultado.pontos} pontos</p>
-    <p><strong>Nível:</strong> ${resultado.nivel}</p>
-    <p><strong>Pontuação por Pilar:</strong></p>
-    <ul>
-      <li>Serviços Médicos: ${pontuacaoPilares[1]} pontos</li>
-      <li>Protocolos de Atendimento: ${pontuacaoPilares[2]} pontos</li>
-      <li>Educação Médica Continuada: ${pontuacaoPilares[3]} pontos</li>
-    </ul>
-    <p><strong>Área de maior necessidade:</strong> ${pilarMenor.nome} (${pilarMenor.pontos} pontos)</p>
-    <p><strong>PDF recomendado:</strong> ${pilarMenor.pdf}</p>
-    <p style="margin-top: 10px;">${resultado.descricao}</p>
-  </div>
-
-  <div style="margin: 20px 0; padding: 20px; background-color: #f0f7ff; border-radius: 8px;">
-    <h3 style="color: #1e40af;">Mensagem Personalizada:</h3>
+  <div style="margin: 8px 0; padding: 15px; background-color: #f0f7ff; border-radius: 8px;">
     <div style="white-space: pre-line;">${emailPersonalizado}</div>
   </div>
+
+  <!-- Logo no final -->
+<div style="text-align: left; margin-top: 20px;">
+  <img src="${logoUrl}" alt="Logo" style="max-width: 200px; height: auto;">
+</div>
 
   <p style="color: #64748b; margin-top: 20px;">
     Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
@@ -412,11 +428,11 @@ export function MelhoriasHospitais() {
     const obterResposta = (questaoId: number, itemIndex?: number) => {
       const questao = QUESTOES.find(q => q.id === questaoId);
       if (!questao) return { resposta: '', pontos: 0 };
-      
+
       const chave = itemIndex !== undefined ? `${questaoId}_${itemIndex}` : questaoId.toString();
       const respostaValor = dados.respostas[chave] || '';
       const pontos = questao.pontos[respostaValor as keyof typeof questao.pontos] || 0;
-      
+
       // Converter resposta numérica para texto legível
       let respostaTexto = '';
       if (questao.opcoes && questao.opcoes[respostaValor]) {
@@ -424,7 +440,7 @@ export function MelhoriasHospitais() {
       } else {
         respostaTexto = respostaValor;
       }
-      
+
       return { resposta: respostaTexto, pontos };
     };
 
@@ -436,15 +452,16 @@ export function MelhoriasHospitais() {
         nome: dados.nome,
         telefone: dados.telefone,
         email: dados.email,
+        cargo: dados.cargo,
         hospital: dados.hospital,
         cidade: dados.cidade,
         uf: dados.uf,
         dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-        
+
         // PILAR 1 - Questão 1 (Colunas H-I)
         nivelSatisfacaoServicoMedicoPlantaoAtual: obterResposta(1).resposta,
         pontosQ1: obterResposta(1).pontos,
-        
+
         // PILAR 1 - Questão 2 (Colunas J-Q)
         furoOuAtrasoNaEscala: obterResposta(2, 0).resposta,
         pontosQ21: obterResposta(2, 0).pontos,
@@ -454,7 +471,7 @@ export function MelhoriasHospitais() {
         pontosQ23: obterResposta(2, 2).pontos,
         comunicacaoIneficenteEntreCorpoClinicoEDirecao: obterResposta(2, 3).resposta,
         pontosQ24: obterResposta(2, 3).pontos,
-        
+
         // PILAR 1 - Questão 3 (Colunas R-X)
         demoraNoAtendimento: obterResposta(3, 0).resposta,
         pontosQ31: obterResposta(3, 0).pontos,
@@ -462,7 +479,7 @@ export function MelhoriasHospitais() {
         pontosQ32: obterResposta(3, 1).pontos,
         faltaDeExplicacaoClaraSobreDiagnosticoOuTratamento: obterResposta(3, 2).resposta,
         pontosQ33: obterResposta(3, 2).pontos,
-        
+
         // PILAR 1 - Questão 4 (Colunas Y-AJ)
         uti: obterResposta(4, 0).resposta,
         pontosQ41: obterResposta(4, 0).pontos,
@@ -476,7 +493,7 @@ export function MelhoriasHospitais() {
         pontosQ45: obterResposta(4, 4).pontos,
         anestesiologia: obterResposta(4, 5).resposta,
         pontosQ46: obterResposta(4, 5).pontos,
-        
+
         // PILAR 2 - Questões 5-8 (Colunas AK-AR)
         existemProtocolosMedicosDescritosParaOsPrincipaisFluxosDeEmergencia: obterResposta(5).resposta,
         pontosQ5: obterResposta(5).pontos,
@@ -486,7 +503,7 @@ export function MelhoriasHospitais() {
         pontosQ7: obterResposta(7).pontos,
         voceEstaSatisfeitoComAQuantidadeDeExamesSolicitadosNoPlantao: obterResposta(8).resposta,
         pontosQ8: obterResposta(8).pontos,
-        
+
         // PILAR 3 - Questões 9-12 (Colunas AS-AZ)
         existemTreinamentosRegularesTrimestraisParaAEquipeMedica: obterResposta(9).resposta,
         pontosQ9: obterResposta(9).pontos,
@@ -496,7 +513,7 @@ export function MelhoriasHospitais() {
         pontosQ11: obterResposta(11).pontos,
         medicosIaEmergenciaOuUtiApresentamDificuldadeParaRealizarIntubacao: obterResposta(12).resposta,
         pontosQ12: obterResposta(12).pontos,
-        
+
         // Resultados finais (Colunas BA-BH)
         pilar1ServicosMedicos: pontuacaoPilares[1],
         pilar2ProtocolosDeAtendimento: pontuacaoPilares[2],
@@ -505,13 +522,12 @@ export function MelhoriasHospitais() {
         nivel: resultado.nivel,
         recomendacao: resultado.descricao,
         pdfRecomendado: pilarMenor.pdf,
-        
-        // Campos extras movidos para dentro de dados
         tipo_formulario: TIPO_FORMULARIO,
         pilar_menor: pilarMenor.nome,
-        nota_menor: pilarMenor.pontos
+        nota_menor: pilarMenor.pontos,
+        stringValidacao: pontuacaoPilares['stringValidacao']
       },
-      
+
       // Campos extras fora do subgrupo dados (não vão para planilha)
       respostas: respostasOrdenadas,
       pdfUrl: pdfUrl,
@@ -537,13 +553,13 @@ export function MelhoriasHospitais() {
         console.error('Resposta do servidor:', errorText);
         throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
-      
+
       const responseData = await response.json();
       console.log('Webhook enviado com sucesso:', responseData);
-      
+
     } catch (error) {
       console.error('Erro completo ao enviar webhook:', error);
-      
+
       // Mostrar erro mais detalhado no console para debugging
       if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
         console.error('Erro de rede - verifique a conexão e a URL do webhook');
@@ -561,8 +577,8 @@ export function MelhoriasHospitais() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.nome.trim() || !formData.email.trim() || 
-        !formData.hospital.trim() || !formData.cidade.trim() || !formData.uf.trim() || !formData.telefone.trim()) {
+    if (!formData.nome.trim() || !formData.email.trim() ||
+      !formData.hospital.trim() || !formData.cidade.trim() || !formData.uf.trim() || !formData.telefone.trim()) {
       alert('Por favor, preencha todos os campos do formulário.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -585,35 +601,41 @@ export function MelhoriasHospitais() {
         return !formData.respostas[questao.id.toString()];
       }
     });
-    
+
     if (questoesSemResposta.length > 0) {
       const primeiraQuestaoSemResposta = questoesSemResposta[0];
       let element: Element | null = null;
-      
+
       if (primeiraQuestaoSemResposta.tipo === 'dropdown_multiplo') {
         element = document.querySelector(`[name="questao-${primeiraQuestaoSemResposta.id}_0"]`);
       } else {
         element = document.querySelector(`[name="questao-${primeiraQuestaoSemResposta.id}"]`);
       }
-      
+
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      
+
       alert(`Por favor, responda a questão "${primeiraQuestaoSemResposta.titulo}"`);
       return;
     }
 
     // Calcular pontuações
-    const pontuacaoPilares = calcularPontuacaoPorPilar(formData.respostas);
+    const pontuacaoPilaresRaw = calcularPontuacaoPorPilar(formData.respostas);
+    // Extrair apenas os pilares numéricos para evitar NaN
+    const pontuacaoPilares = {
+      1: pontuacaoPilaresRaw[1],
+      2: pontuacaoPilaresRaw[2],
+      3: pontuacaoPilaresRaw[3]
+    };
     const pontos = calcularPontuacao(formData.respostas);
     const resultadoFinal = determinarNivel(pontos);
     const pilarMenor = determinarPilarMenorNota(pontuacaoPilares);
     const resultado = { ...resultadoFinal, pontos };
-    
+
     setResultado(resultado);
     setShowModal(true);
-    await enviarWebhook(formData, resultado, pontuacaoPilares, pilarMenor);
+    await enviarWebhook(formData, resultado, pontuacaoPilaresRaw, pilarMenor);
   };
 
   const formatarTelefone = (valor: string) => {
@@ -643,6 +665,7 @@ export function MelhoriasHospitais() {
     setFormData({
       nome: '',
       email: '',
+      cargo: '',
       hospital: '',
       cidade: '',
       uf: '',
@@ -657,9 +680,10 @@ export function MelhoriasHospitais() {
   const preencherDadosTeste = () => {
     const dadosTeste = {
       nome: 'Dr. João Silva Santos',
-      email: 'joao.silva@hospitalteste.com.br',
+      email: 'jlianeiva@gmail.com',
+      cargo: 'Diretor Clínico',
       hospital: 'Hospital São Francisco',
-      cidade: 'São Paulo', 
+      cidade: 'São Paulo',
       uf: 'SP',
       telefone: '(11) 99888-7766',
       respostas: {
@@ -712,8 +736,8 @@ export function MelhoriasHospitais() {
 
             {/* Lado Direito - Formulário de Dados */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-800 mb-4">
-                AVALIAÇÃO DE MELHORIAS HOSPITALARES
+              <h1 className="text-2xl font-bold text-gray-800 mb-4">
+                Diagnóstico Rapimed -  Hospitalar
               </h1>
 
               <div className="space-y-6">
@@ -742,6 +766,20 @@ export function MelhoriasHospitais() {
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="cargo" className="block text-sm font-medium text-gray-700 mb-1">
+                    Cargo Atual *
+                  </label>
+                  <input
+                    type="text"
+                    id="cargo"
+                    required
+                    value={formData.cargo}
+                    onChange={(e) => setFormData(prev => ({ ...prev, cargo: e.target.value }))}
+                    placeholder="Ex: Diretor Clínico, Coordenador, etc."
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
                   />
                 </div>
@@ -855,7 +893,7 @@ export function MelhoriasHospitais() {
             <h2 className="text-xl font-semibold text-gray-700 mb-4 text-center">
               Avalie o nível atual de cada área em sua instituição
             </h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-4">
                 {QUESTOES.map((questao) => {
@@ -875,7 +913,7 @@ export function MelhoriasHospitais() {
                       {questao.subtitulo && (
                         <p className="text-sm text-gray-600 mb-3">{questao.subtitulo}</p>
                       )}
-                      
+
                       {questao.tipo === 'radio' ? (
                         <div className="space-y-2">
                           {Object.entries(questao.opcoes).map(([valor, texto]) => (
@@ -968,8 +1006,8 @@ export function MelhoriasHospitais() {
       {showModal && resultado && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full relative">
-            <button 
-              onClick={() => setShowModal(false)} 
+            <button
+              onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
             >
               <X className="h-6 w-6" />

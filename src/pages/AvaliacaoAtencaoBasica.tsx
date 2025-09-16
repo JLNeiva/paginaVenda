@@ -348,43 +348,74 @@ export function AvaliacaoAtencaoBasica() {
 
   const [showModal, setShowModal] = useState(false);
 
+  // Novo cálculo dos pontos dos pilares
   const calcularPontuacao = () => {
-    const pontuacaoPilares: { [key: number]: number } = { 1: 0, 2: 0, 3: 0 };
-    
+    // 1. Calcular pontos brutos por pilar
+    const pontosBrutos: { [key: number]: number } = { 1: 0, 2: 0, 3: 0 };
     QUESTOES.forEach(questao => {
-      if (questao.pilar === 0) return; // Pular questões que não pontuam
-      
+      if (questao.pilar === 0) return;
       if (questao.tipo === 'radio') {
         const resposta = formData.respostas[questao.id.toString()] as string;
         if (resposta && questao.pontos[resposta] !== undefined) {
-          pontuacaoPilares[questao.pilar] += questao.pontos[resposta];
+          pontosBrutos[questao.pilar] += questao.pontos[resposta];
         }
       } else if (questao.tipo === 'checkbox') {
         const respostas = formData.respostas[questao.id.toString()] as string[] || [];
         respostas.forEach(resposta => {
           if (questao.pontos[resposta] !== undefined) {
-            pontuacaoPilares[questao.pilar] += questao.pontos[resposta];
+            pontosBrutos[questao.pilar] += questao.pontos[resposta];
           }
         });
       } else if (questao.tipo === 'dropdown_multiplo') {
-        // Para questões dropdown_multiplo, somar pontos de todos os itens
         questao.itens?.forEach((_, index) => {
           const chaveResposta = `${questao.id}_${index}`;
           const resposta = formData.respostas[chaveResposta] as string;
           if (resposta && questao.pontos[resposta] !== undefined) {
-            pontuacaoPilares[questao.pilar] += questao.pontos[resposta];
+            pontosBrutos[questao.pilar] += questao.pontos[resposta];
           }
         });
       }
     });
 
-    const pontuacaoTotal = Object.values(pontuacaoPilares).reduce((acc, val) => acc + val, 0);
+    // 2. Calcular valor máximo possível por pilar
+    const maximos: { [key: number]: number } = { 1: 0, 2: 0, 3: 0 };
+    QUESTOES.forEach(questao => {
+      if (questao.pilar === 0) return;
+      if (questao.tipo === 'radio') {
+        const max = Math.max(...Object.values(questao.pontos));
+        maximos[questao.pilar] += max;
+      } else if (questao.tipo === 'checkbox') {
+        // Para checkbox, considerar que pode marcar todas opções
+        maximos[questao.pilar] += Object.values(questao.pontos).reduce((a, b) => a + b, 0);
+      } else if (questao.tipo === 'dropdown_multiplo') {
+        questao.itens?.forEach(() => {
+          const max = Math.max(...Object.values(questao.pontos));
+          maximos[questao.pilar] += max;
+        });
+      }
+    });
+
+    // 3. Calcular pontos finais por pilar usando a fórmula
+    const pontuacaoPilares: { [key: number]: number } = { 1: 0, 2: 0, 3: 0 };
+    for (let pilar = 1; pilar <= 3; pilar++) {
+      // Se maximos for 0, evitar divisão por zero
+      pontuacaoPilares[pilar] = maximos[pilar] > 0
+        ? Number(((pontosBrutos[pilar] / maximos[pilar]) * 10).toFixed(1))
+        : 0;
+    }
+
+    // 4. Calcular nota final (média simples)
+    const pontuacaoTotal = Number(((pontuacaoPilares[1] + pontuacaoPilares[2] + pontuacaoPilares[3]) / 3).toFixed(1));
     const nivel = determinarNivel(pontuacaoTotal);
+
+    // 5. String de validação para n8n
+    const stringValidacao = `N1 = ${maximos[1]}/${pontosBrutos[1]} _ N2 = ${maximos[2]}/${pontosBrutos[2]} _ N3 = ${maximos[3]}/${pontosBrutos[3]} _ NotaFinal = ${pontuacaoTotal}`;
 
     return {
       ...nivel,
       pontuacaoPilares,
-      pontuacaoTotal
+      pontuacaoTotal,
+      stringValidacao
     };
   };
 
@@ -558,18 +589,17 @@ export function AvaliacaoAtencaoBasica() {
         pontosQ13: obterResposta(13).pontos,
         
         // Resultados finais
-        pilar1ServicosMedicos: pontuacaoPilares[1],
-        pilar2ProtocolosDeAtendimento: pontuacaoPilares[2],
-        pilar3EducacaoMedicaContinuada: pontuacaoPilares[3],
-        pontuacaoGeral: resultado.pontuacaoTotal,
-        nivel: resultado.nivel,
-        recomendacao: resultado.descricao,
-        pdfRecomendado: pilarMenor.pdf,
-        
-        // Campos extras movidos para dentro de dados
-        tipo_formulario: TIPO_FORMULARIO,
-        pilar_menor: pilarMenor.nome,
-        nota_menor: pilarMenor.pontos
+  pilar1ServicosMedicos: pontuacaoPilares[1],
+  pilar2ProtocolosDeAtendimento: pontuacaoPilares[2],
+  pilar3EducacaoMedicaContinuada: pontuacaoPilares[3],
+  pontuacaoGeral: resultado.pontuacaoTotal,
+  nivel: resultado.nivel,
+  recomendacao: resultado.descricao,
+  pdfRecomendado: pilarMenor.pdf,
+  tipo_formulario: TIPO_FORMULARIO,
+  pilar_menor: pilarMenor.nome,
+  nota_menor: pilarMenor.pontos,
+  stringValidacao: resultado.stringValidacao
       },
       
       // Campos extras fora do subgrupo dados (não vão para planilha)
@@ -741,7 +771,7 @@ export function AvaliacaoAtencaoBasica() {
   const preencherDadosTeste = () => {
     const dadosTeste = {
       nome: 'Dr. Ana Paula Silva',
-      email: 'ana.silva@saude.municipio.br',
+      email: 'jlianeiva@gmail.com',
       municipio: 'Rio de Janeiro',
       estado: 'RJ', 
       cargo: 'Coordenadora dos Postos de Saúde',
@@ -791,7 +821,7 @@ export function AvaliacaoAtencaoBasica() {
             {/* Lado Esquerdo - Imagem */}
             <div className="w-[220px] sm:w-[260px] md:w-[300px] lg:w-[350px] flex-shrink-0 self-center aspect-[2/3] rounded-lg shadow-md overflow-hidden">
               <img
-                src="/assets/havaliacaoPostoSaude.png"
+                src="/assets/havaliacaoPostoSaude.jpeg"
                 alt="Avaliação Posto de Saúde"
                 className="w-full h-full object-contain"
                 loading="lazy"
@@ -801,8 +831,8 @@ export function AvaliacaoAtencaoBasica() {
 
             {/* Lado Direito - Formulário de Dados */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-800 mb-6">
-                AVALIAÇÃO DE POSTOS DE SAÚDE
+              <h1 className="text-2xl font-bold text-gray-800 mb-6">
+                Diagnóstico Rapimed -  Hospitalar
               </h1>
 
               <div className="space-y-6">
@@ -924,7 +954,7 @@ export function AvaliacaoAtencaoBasica() {
                 </div>
               </div>
             </div>
-
+{/*
             <div className="ml-8">
               <button
                 type="button"
@@ -933,7 +963,7 @@ export function AvaliacaoAtencaoBasica() {
               >
                 Preencher Teste
               </button>
-            </div>
+            </div>*/}
           </div>
 
           {/* Seção de Questionário */}
