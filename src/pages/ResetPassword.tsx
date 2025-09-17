@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { exibirMensagem } from '../utils/exibirMensagem';
 
-export function ResetPassword() {
+export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);

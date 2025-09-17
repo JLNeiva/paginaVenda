@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AuthButton } from '../components/AuthButton';
 
-export function About() {
+export default function About() {
   const navigate = useNavigate();
 
   const handleSectionNavigation = (sectionId: string) => {

@@ -36,7 +36,7 @@ interface Parametro {
   valor: string;
 }
 
-export function Settings() {
+export default function Settings() {
   const navigate = useNavigate();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [parametros, setParametros] = useState<Parametro[]>([]);

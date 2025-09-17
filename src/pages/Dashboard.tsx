@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 
-export function Dashboard() {
+export default function Dashboard() {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [dashboards, setDashboards] = useState<any[]>([]);

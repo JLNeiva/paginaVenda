@@ -158,7 +158,7 @@ const determinarNivel = (pontos: number) => {
   };
 };
 
-export function DiagnosticoNR1() {
+export default function DiagnosticoNR1() {
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     email: '',

@@ -1,20 +1,27 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import App from './App';
-import { Terms } from './pages/Terms';
-import { Settings } from './pages/Settings';
-import { Dashboard } from './pages/Dashboard';
-import { Privacy } from './pages/Privacy';
-import { About } from './pages/About';
-import { ResetPassword } from './pages/ResetPassword';
-import { DiagnosticoNR1 } from './pages/DiagnosticoNR1';
-import { MelhoriasHospitais } from './pages/MelhoriasHospitais';
-import AvaliacaoAtencaoBasica from './pages/AvaliacaoAtencaoBasica';
+// routes.tsx (TSX)
+//import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import HostAwareHome from "./HostAwareHome"; // passo B (router por host)
+import App from "./App";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Settings from "./pages/Settings";
+import Dashboard from "./pages/Dashboard";
+import About from "./pages/About";
+import ResetPassword from "./pages/ResetPassword";
+import DiagnosticoNR1 from "./pages/DiagnosticoNR1";
+import MelhoriasHospitais from "./pages/MelhoriasHospitais";
+import AvaliacaoAtencaoBasica from "./pages/AvaliacaoAtencaoBasica";
 
 export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        {/* Raiz decide pelo host e mantém URL limpa */}
+        <Route path="/" element={<HostAwareHome defaultComponent={App} />} />
+
+        {/* Rotas existentes */}
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/settings" element={<Settings />} />
@@ -28,3 +35,6 @@ export function AppRoutes() {
     </BrowserRouter>
   );
 }
+
+// export default também, para evitar erro de import mismatch
+export default AppRoutes;

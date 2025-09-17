@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthButton } from '../components/AuthButton';
 
-export function Privacy() {
+export default function Privacy() {
   const navigate = useNavigate();
   // const currentDate = new Date("2018-05-05").toLocaleDateString('pt-BR');
 

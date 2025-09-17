@@ -346,7 +346,7 @@ const determinarNivel = (pontos: number) => {
   };
 };
 
-export function MelhoriasHospitais() {
+export default function MelhoriasHospitais() {
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     email: '',
@@ -735,7 +735,7 @@ export function MelhoriasHospitais() {
             {/* Lado Esquerdo - Imagem */}
             <div className="w-[220px] sm:w-[260px] md:w-[300px] lg:w-[350px] flex-shrink-0 self-center aspect-[2/3] rounded-lg shadow-md overflow-hidden">
               <img
-                src="/assets/havaliacaoHospitalar.png"
+                src="/assets/havaliacaoHospitalar.jpeg"
                 alt="Melhorias Hospitalares"
                 className="w-full h-full object-contain"
                 loading="lazy"
