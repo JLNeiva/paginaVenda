@@ -22,8 +22,8 @@ export function AppRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/diagnosticonr1" element={<DiagnosticoNR1 />} />
-        <Route path="/melhorias-hospitais" element={<MelhoriasHospitais />} />
-        <Route path="/avaliacao-atencao-basica" element={<AvaliacaoAtencaoBasica />} />
+        <Route path="/diagnosticohospitalar" element={<MelhoriasHospitais />} />
+        <Route path="/diagnosticoatencaobasica" element={<AvaliacaoAtencaoBasica />} />
       </Routes>
     </BrowserRouter>
   );
