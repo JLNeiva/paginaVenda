@@ -112,7 +112,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 3,
-    titulo: "3. Principais dores relatadas pelos pacientes (marcar quantos se aplicam)",
+    titulo: "3. Principais dores relatadas pelos pacientes",
     tipo: "dropdown_multiplo",
     pilar: 1,
     itens: [
@@ -237,7 +237,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 12,
-    titulo: "4. Médicos da emergência ou UTI apresentam dificuldade para realizar intubação correta e ágil?",
+    titulo: "4. Médicos do seu hospital apresentam dificuldade com via aérea difícil (entubação, cricotireoidostomia)?",
     tipo: "radio",
     pilar: 3,
     opcoes: {
@@ -305,9 +305,12 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
   for (const pilar of PRIORIDADE_PILARES) {
     if (pontuacaoPilares[pilar] === menorNota) {
       const pdfNames = {
-        1: "Melhorias para Serviços Médicos.pdf",
-        2: "Melhorias para Protocolos de Atendimento.pdf",
-        3: "Melhorias para Educação Médica Continuada.pdf"
+     //   1: "Melhorias para Serviços Médicos.pdf",
+        1: "Devolutiva_Serviços Médicos.pdf",
+      //  2: "Melhorias para Protocolos de Atendimento.pdf",
+        2: "Devolutiva_Protocolos Médicos.pdf",
+      //  3: "Melhorias para Educação Médica Continuada.pdf"
+        3: "Devolutiva_Educação Continuada.pdf"
       };
 
       return {
@@ -323,7 +326,7 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
     pilar: 1,
     nome: NOMES_PILARES[0],
     pontos: menorNota,
-    pdf: "Melhorias para Serviços Médicos.pdf"
+    pdf: "Devolutiva_Serviços Médicos.pdf"
   };
 };
 
