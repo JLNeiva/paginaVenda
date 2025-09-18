@@ -409,7 +409,8 @@ export function AvaliacaoAtencaoBasica() {
     const nivel = determinarNivel(pontuacaoTotal);
 
     // 5. String de validação para n8n
-    const stringValidacao = `N1 = ${maximos[1]}/${pontosBrutos[1]} _ N2 = ${maximos[2]}/${pontosBrutos[2]} _ N3 = ${maximos[3]}/${pontosBrutos[3]} _ NotaFinal = ${pontuacaoTotal}`;
+ //   const stringValidacao = `N1 = ${maximos[1]}/${pontosBrutos[1]} _ N2 = ${maximos[2]}/${pontosBrutos[2]} _ N3 = ${maximos[3]}/${pontosBrutos[3]} _ NotaFinal = ${pontuacaoTotal}`;
+    const stringValidacao = `N1 = (${pontosBrutos[1]} / ${maximos[1]}=${pontuacaoPilares[1]}) N2 = (${pontosBrutos[2]} / ${maximos[2]}=${pontuacaoPilares[2]}) N3 = (${pontosBrutos[3]} / ${maximos[3]}=${pontuacaoPilares[3]}) | NotaFinal = ${pontuacaoTotal}`;
 
     return {
       ...nivel,
