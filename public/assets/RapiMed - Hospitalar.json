@@ -1,0 +1,1530 @@
+{
+  "name": "RapiMed - Hospitalar",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "melhorias-hospitais",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1344,
+        64
+      ],
+      "id": "2683ced5-5b6e-440b-a48f-3155a65a2033",
+      "name": "Webhook",
+      "webhookId": "f0346a72-0ec3-4bd4-acd5-944fab3505b6"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $node[\"Webhook\"].json.body.dados.email }}",
+        "subject": "Devolutiva Diagnóstico Rapimed — Hospitalar",
+        "message": "={{ $node[\"Webhook\"].json.body.emailContent }}",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        -208
+      ],
+      "id": "822a6ceb-906e-4700-8513-2e371a2055b6",
+      "name": "Send a message",
+      "webhookId": "439efafa-4a5d-4b41-bc37-1a312495921b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "OcHKrR8oM70REpCK",
+          "name": "Gmail rapimed"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WnC_lod2Q8xQfzPXIKWP9SDaaELD_aKOSXerkaEIt94",
+          "mode": "list",
+          "cachedResultName": "Dados_Pesquisa_Hospitalar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WnC_lod2Q8xQfzPXIKWP9SDaaELD_aKOSXerkaEIt94/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1976502382,
+          "mode": "list",
+          "cachedResultName": "cabecalho_planilha",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WnC_lod2Q8xQfzPXIKWP9SDaaELD_aKOSXerkaEIt94/edit#gid=1976502382"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hospital",
+              "displayName": "hospital",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cidade",
+              "displayName": "cidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "uf",
+              "displayName": "uf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dataHora",
+              "displayName": "dataHora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nivelSatisfacaoServicoMedicoPlantaoAtual",
+              "displayName": "nivelSatisfacaoServicoMedicoPlantaoAtual",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ1",
+              "displayName": "pontosQ1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "furoOuAtrasoNaEscala",
+              "displayName": "furoOuAtrasoNaEscala",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ21",
+              "displayName": "pontosQ21",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dificuldadeEmEncontrarMedicoDisponivel",
+              "displayName": "dificuldadeEmEncontrarMedicoDisponivel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ22",
+              "displayName": "pontosQ22",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "maoDeObraDesqualificada",
+              "displayName": "maoDeObraDesqualificada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ23",
+              "displayName": "pontosQ23",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "comunicacaoIneficenteEntreCorpoClinicoEDirecao",
+              "displayName": "comunicacaoIneficenteEntreCorpoClinicoEDirecao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ24",
+              "displayName": "pontosQ24",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "demoraNoAtendimento",
+              "displayName": "demoraNoAtendimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ31",
+              "displayName": "pontosQ31",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendimentoPoucoHumanizado",
+              "displayName": "atendimentoPoucoHumanizado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ32",
+              "displayName": "pontosQ32",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "faltaDeExplicacaoClaraSobreDiagnosticoOuTratamento",
+              "displayName": "faltaDeExplicacaoClaraSobreDiagnosticoOuTratamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ33",
+              "displayName": "pontosQ33",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "uti",
+              "displayName": "uti",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ41",
+              "displayName": "pontosQ41",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pediatria",
+              "displayName": "pediatria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ42",
+              "displayName": "pontosQ42",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "emergencia",
+              "displayName": "emergencia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ43",
+              "displayName": "pontosQ43",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "obstetricia",
+              "displayName": "obstetricia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ44",
+              "displayName": "pontosQ44",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "psiquiatria",
+              "displayName": "psiquiatria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ45",
+              "displayName": "pontosQ45",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "anestesiologia",
+              "displayName": "anestesiologia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ46",
+              "displayName": "pontosQ46",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "existemProtocolosMedicosDescritosParaOsPrincipaisFluxosDeEmergencia",
+              "displayName": "existemProtocolosMedicosDescritosParaOsPrincipaisFluxosDeEmergencia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ5",
+              "displayName": "pontosQ5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "osProtocolosSaoAtualizadosComFrequenciaEBaseCientifica",
+              "displayName": "osProtocolosSaoAtualizadosComFrequenciaEBaseCientifica",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ6",
+              "displayName": "pontosQ6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "haIndicadoresQueMonitoramAadesaoDosMedicosAosProtocolos",
+              "displayName": "haIndicadoresQueMonitoramAadesaoDosMedicosAosProtocolos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ7",
+              "displayName": "pontosQ7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "voceEstaSatisfeitoComAQuantidadeDeExamesSolicitadosNoPlantao",
+              "displayName": "voceEstaSatisfeitoComAQuantidadeDeExamesSolicitadosNoPlantao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ8",
+              "displayName": "pontosQ8",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "existemTreinamentosRegularesTrimestraisParaAEquipeMedica",
+              "displayName": "existemTreinamentosRegularesTrimestraisParaAEquipeMedica",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ9",
+              "displayName": "pontosQ9",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "aCapacitacaoDaEquipeEstaAlinhadaComOsProtocolosInstitucionais",
+              "displayName": "aCapacitacaoDaEquipeEstaAlinhadaComOsProtocolosInstitucionais",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ10",
+              "displayName": "pontosQ10",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "existeProgramaOuFerramentaDeEducacaoMedicaContinuada",
+              "displayName": "existeProgramaOuFerramentaDeEducacaoMedicaContinuada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ11",
+              "displayName": "pontosQ11",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "medicosIaEmergenciaOuUtiApresentamDificuldadeParaRealizarIntubacao",
+              "displayName": "medicosIaEmergenciaOuUtiApresentamDificuldadeParaRealizarIntubacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontosQ12",
+              "displayName": "pontosQ12",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pilar1ServicosMedicos",
+              "displayName": "pilar1ServicosMedicos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pilar2ProtocolosDeAtendimento",
+              "displayName": "pilar2ProtocolosDeAtendimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pilar3EducacaoMedicaContinuada",
+              "displayName": "pilar3EducacaoMedicaContinuada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pontuacaoGeral",
+              "displayName": "pontuacaoGeral",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nivel",
+              "displayName": "nivel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recomendacao",
+              "displayName": "recomendacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pdfRecomendado",
+              "displayName": "pdfRecomendado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -384,
+        -16
+      ],
+      "id": "6c2a224b-2d1e-4a80-b010-a019848339c4",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ymO42ZGTEzn3OxJw",
+          "name": "Google Sheets Rapimed"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5fcf1fae-4cec-4aaf-93f4-b397dde57472",
+              "name": "body",
+              "value": "={{ $json.body.dados }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        -16
+      ],
+      "id": "6105292d-a68f-4037-b0f7-baa6319a1f48",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return { json: $json.body };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -592,
+        -16
+      ],
+      "id": "84a9bfbc-eacd-49e3-9975-e155d74d8057",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.body.dados.pdfRecomendado }}",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1-Bb8GuFA7xRUNyg6pP2RP-Oej6tuXnUZ",
+            "mode": "list",
+            "cachedResultName": "pdfs",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1-Bb8GuFA7xRUNyg6pP2RP-Oej6tuXnUZ"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -864,
+        -208
+      ],
+      "id": "a0557287-81d0-488d-82a7-6539bd7dda56",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "SCqy4Y7OiCkdypeh",
+          "name": "Google Drive Rapimed"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -592,
+        -208
+      ],
+      "id": "a71a3693-649b-40cb-8dd8-435b96c35279",
+      "name": "Download file",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "SCqy4Y7OiCkdypeh",
+          "name": "Google Drive Rapimed"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.dados.tipo_formulario }}",
+                    "rightValue": "Gestor Hospitalar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f76eab6a-30c9-42a5-96c1-8370f73cfa81"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Gestor Hospitalar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ec42f2eb-687f-48f4-8922-8f6da03aea9d",
+                    "leftValue": "={{ $json.body.dados.tipo_formulario }}",
+                    "rightValue": "Postos de Saúde",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Posto saúde"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1104,
+        64
+      ],
+      "id": "8b8d68b0-4e2d-4226-85f0-6e7c4c793c5d",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $node[\"Webhook\"].json.body.dados.email }}",
+        "subject": "Devolutiva Diagnóstico Rapimed — Hospitalar",
+        "message": "={{ $node[\"Webhook\"].json.body.emailContent }}",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        208
+      ],
+      "id": "08c21d13-102e-4be8-be1d-d18fffe9b24b",
+      "name": "Send a message1",
+      "webhookId": "439efafa-4a5d-4b41-bc37-1a312495921b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "OcHKrR8oM70REpCK",
+          "name": "Gmail rapimed"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WnC_lod2Q8xQfzPXIKWP9SDaaELD_aKOSXerkaEIt94",
+          "mode": "list",
+          "cachedResultName": "Dados_Pesquisa_Hospitalar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WnC_lod2Q8xQfzPXIKWP9SDaaELD_aKOSXerkaEIt94/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1060387214,
+          "mode": "list",
+          "cachedResultName": "Posto_Saude",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WnC_lod2Q8xQfzPXIKWP9SDaaELD_aKOSXerkaEIt94/edit#gid=1060387214"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "municipio",
+              "displayName": "municipio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "regiao",
+              "displayName": "regiao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "uf",
+              "displayName": "uf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "dataHora",
+              "displayName": "dataHora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "coberturaProgramaSaudeFamilia",
+              "displayName": "coberturaProgramaSaudeFamilia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ1",
+              "displayName": "pontosQ1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "existemProtocolosAssistenciaisPadronizados",
+              "displayName": "existemProtocolosAssistenciaisPadronizados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ2",
+              "displayName": "pontosQ2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "frequenciaAtualizacaoProtocolos",
+              "displayName": "frequenciaAtualizacaoProtocolos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ3",
+              "displayName": "pontosQ3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "indicadoresDeMonitoramento",
+              "displayName": "indicadoresDeMonitoramento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ4",
+              "displayName": "pontosQ4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "qualidadeDoSaneamentoBasico",
+              "displayName": "qualidadeDoSaneamentoBasico",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ5",
+              "displayName": "pontosQ5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "percentualCoberturaProgramaAgentesComunitarios",
+              "displayName": "percentualCoberturaProgramaAgentesComunitarios",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ6",
+              "displayName": "pontosQ6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "satisfacaoFuncionariosComTreinamentos",
+              "displayName": "satisfacaoFuncionariosComTreinamentos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ7",
+              "displayName": "pontosQ7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "frequenciaTreinamentosEquipesSaude",
+              "displayName": "frequenciaTreinamentosEquipesSaude",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ8",
+              "displayName": "pontosQ8",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "percentualCoberturaProgramaNutricao",
+              "displayName": "percentualCoberturaProgramaNutricao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ9",
+              "displayName": "pontosQ9",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "percentualCoberturaProgramaVacinacao",
+              "displayName": "percentualCoberturaProgramaVacinacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ10",
+              "displayName": "pontosQ10",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "qualidadeTelemedicinaTelemedicina",
+              "displayName": "qualidadeTelemedicinaTelemedicina",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ11",
+              "displayName": "pontosQ11",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "percentualCoberturaProgramaSaudeMental",
+              "displayName": "percentualCoberturaProgramaSaudeMental",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ12",
+              "displayName": "pontosQ12",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "existeProgramaEducacaoMedicaContinuada",
+              "displayName": "existeProgramaEducacaoMedicaContinuada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontosQ13",
+              "displayName": "pontosQ13",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pilar1ServicosMedicos",
+              "displayName": "pilar1ServicosMedicos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pilar2ProtocolosDeAtendimento",
+              "displayName": "pilar2ProtocolosDeAtendimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pilar3EducacaoMedicaContinuada",
+              "displayName": "pilar3EducacaoMedicaContinuada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pontuacaoGeral",
+              "displayName": "pontuacaoGeral",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nivel",
+              "displayName": "nivel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "recomendacao",
+              "displayName": "recomendacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pdfRecomendado",
+              "displayName": "pdfRecomendado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tipo_formulario",
+              "displayName": "tipo_formulario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pilar_menor",
+              "displayName": "pilar_menor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nota_menor",
+              "displayName": "nota_menor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -368,
+        400
+      ],
+      "id": "cedcaf76-3230-4b31-b88c-5d3728a559fd",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ymO42ZGTEzn3OxJw",
+          "name": "Google Sheets Rapimed"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5fcf1fae-4cec-4aaf-93f4-b397dde57472",
+              "name": "body",
+              "value": "={{ $('Webhook').item.json.body.dados }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -832,
+        400
+      ],
+      "id": "b02db546-0f68-40f1-a845-65cfdb514357",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return { json: $json.body };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        400
+      ],
+      "id": "231ef88b-57f5-41a9-9b46-fe1ad83d9f9a",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Webhook').item.json.body.dados.pdfRecomendado }}",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1-Bb8GuFA7xRUNyg6pP2RP-Oej6tuXnUZ",
+            "mode": "list",
+            "cachedResultName": "pdfs",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1-Bb8GuFA7xRUNyg6pP2RP-Oej6tuXnUZ"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -848,
+        208
+      ],
+      "id": "4429fe42-a3f6-4c91-9f37-00a5a198acef",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "SCqy4Y7OiCkdypeh",
+          "name": "Google Drive Rapimed"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -576,
+        208
+      ],
+      "id": "5a1aa82a-9b17-4911-9e1e-843a116037aa",
+      "name": "Download file1",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "SCqy4Y7OiCkdypeh",
+          "name": "Google Drive Rapimed"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0ba08794-5d37-492b-af7d-26094d43c571",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "acfb1185843ef670b959635903182bb0d6c33b2fb52ffff41086e3c7cfe2300f"
+  },
+  "id": "iWQ5luvAigQICP3f",
+  "tags": []
+}
