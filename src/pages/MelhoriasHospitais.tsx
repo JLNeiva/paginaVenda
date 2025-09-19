@@ -237,7 +237,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 12,
-    titulo: "4. Médicos do seu hospital apresentam dificuldade com via aérea difícil (entubação, cricotireoidostomia)?",
+    titulo: "4. Médicos do seu hospital apresentam dificuldade com via aérea difícil (intubação, cricotireoidostomia)?",
     tipo: "radio",
     pilar: 3,
     opcoes: {
@@ -888,7 +888,7 @@ export default function MelhoriasHospitais() {
           </div>
         </div>
 
-        {/* Botão de Teste - Apenas para desenvolvimento */}
+        {/* Botão de Teste - Apenas para desenvolvimento 
         <div className="max-w-4xl mx-auto mb-6">
           <button
             type="button"
@@ -897,7 +897,7 @@ export default function MelhoriasHospitais() {
           >
             🧪 PREENCHER DADOS DE TESTE (DESENVOLVIMENTO)
           </button>
-        </div>
+        </div>*/}
 
         {/* Seção de Questionário */}
         <div className="max-w-4xl mx-auto">
@@ -985,7 +985,22 @@ export default function MelhoriasHospitais() {
                                     [`${questao.id}_${index}`]: e.target.value
                                   }
                                 }))}
-                                className="ml-4 px-3 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm min-w-[200px]"
+                                style={{
+                                  minWidth: '200px',
+                                  marginLeft: '1rem',
+                                  padding: '0.75rem',
+                                  fontSize: '1rem',
+                                  borderRadius: '0.5rem',
+                                  border: '1px solid #d1d5db',
+                                  boxSizing: 'border-box',
+                                  width: '100%',
+                                  maxWidth: '350px',
+                                  ...(window.innerWidth <= 600 ? {
+                                    fontSize: '1.15rem',
+                                    minWidth: '100%',
+                                    padding: '1rem',
+                                  } : {})
+                                }}
                               >
                                 <option value="">Escolha uma opção...</option>
                                 {Object.entries(questao.opcoes).map(([valor, texto]) => (
