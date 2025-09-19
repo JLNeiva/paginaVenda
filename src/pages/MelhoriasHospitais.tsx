@@ -973,8 +973,8 @@ export default function MelhoriasHospitais() {
                       ) : questao.tipo === 'dropdown_multiplo' ? (
                         <div className="space-y-3">
                           {questao.itens.map((item, index) => (
-                            <div key={index} className="flex items-center justify-between bg-white p-3 rounded border">
-                              <span className="flex-1 text-gray-700">• {item}</span>
+                            <div key={index} className="bg-white p-3 rounded border flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                              <span className="text-gray-700 mb-2 sm:mb-0 sm:mr-4">• {item}</span>
                               <select
                                 name={`questao-${questao.id}_${index}`}
                                 value={formData.respostas[`${questao.id}_${index}`] || ''}
@@ -985,22 +985,7 @@ export default function MelhoriasHospitais() {
                                     [`${questao.id}_${index}`]: e.target.value
                                   }
                                 }))}
-                                style={{
-                                  minWidth: '200px',
-                                  marginLeft: '1rem',
-                                  padding: '0.75rem',
-                                  fontSize: '1rem',
-                                  borderRadius: '0.5rem',
-                                  border: '1px solid #d1d5db',
-                                  boxSizing: 'border-box',
-                                  width: '100%',
-                                  maxWidth: '350px',
-                                  ...(window.innerWidth <= 600 ? {
-                                    fontSize: '1.15rem',
-                                    minWidth: '100%',
-                                    padding: '1rem',
-                                  } : {})
-                                }}
+                                className="w-full sm:w-[220px] px-4 py-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
                               >
                                 <option value="">Escolha uma opção...</option>
                                 {Object.entries(questao.opcoes).map(([valor, texto]) => (
