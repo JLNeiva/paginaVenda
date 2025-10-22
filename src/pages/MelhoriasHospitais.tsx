@@ -288,7 +288,7 @@ const calcularPontuacaoPorPilar = (respostas: { [key: string]: string }) => {
   // String de validação para n8n (igual à outra página)
   const stringValidacao = `N1 = (${pontuacaoPilares[1]} / ${maximos[1]}=${normalizados[1]}) N2 = (${pontuacaoPilares[2]} / ${maximos[2]}=${normalizados[2]}) N3 = (${pontuacaoPilares[3]} / ${maximos[3]}=${normalizados[3]}) | NotaFinal = ${((normalizados[1] + normalizados[2] + normalizados[3]) / 3).toFixed(1)}`;
   return { ...normalizados, stringValidacao };
-  return normalizados;
+ // return normalizados;
 };
 
 const calcularPontuacao = (respostas: { [key: string]: string }) => {

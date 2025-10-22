@@ -35,6 +35,7 @@ interface FormData {
   cargo: string;
   telefone: string;
   respostas: { [key: string]: string | string[] };
+  outros: { [key: string]: string }; // Para campos "Outros" das questões
 }
 
 // Constantes de configuração baseadas no PDF dos Secretários de Saúde
@@ -47,22 +48,37 @@ const NOMES_PILARES = [
 ];
 
 // Template configurável para email
-const EMAIL_TEMPLATE = `
-Nome: %nome, sua avaliação foi concluída!
+const EMAIL_TEMPLATE = `Olá, %nome! 
 
-Resultado por pilar:
-- Serviços Médicos: %pontos_pilar1 pontos
-- Protocolos de Atendimento Médico: %pontos_pilar2 pontos  
-- Educação Médica Continuada: %pontos_pilar3 pontos
+Parabéns por concluir o diagnóstico!  
 
-Área de maior necessidade: %pilar_menor
-Plano de ação recomendado: %pdfRecomendado
+Abaixo, seguem os resultados por pilar e a prioridade de atuação:  
 
-Município: %municipio - %uf
-Telefone: %telefone
+<strong>
+ • Serviços Médicos: %pontos_pilar1 pontos
+ • Protocolos de Atendimento: %pontos_pilar2 pontos
+ • Educação Médica Continuada: %pontos_pilar3 pontos
+</strong>
+Pontuação geral do seu município: <strong>%resultadoPontos (%resultadoNivel)</strong>  
 
-Atenciosamente,
-Equipe DashVision Healthcare Solutions
+<strong>Prioridade 1:</strong> %pilar_menor (%nota_menor pontos)  
+
+<strong>Preparamos uma devolutiva objetiva com diretrizes práticas para evoluir esse pilar prioritário — o arquivo segue em anexo para você e sua equipe.</strong>  
+
+Município: %municipio
+
+Conte com a <strong>Rapimed</strong> para <strong>acelerar a eficiência da atenção básica em seu município</strong>. 
+
+Somos o parceiro certo para transformar recomendações em resultados e levar a saúde do sua cidade a um novo patamar de desempenho.  
+
+<strong>Nos chame no contato a seguir para conversarmos e desenharmos os próximos passos:</strong>
+
+ <strong style="color: #166534;"> 📞 51 99524-8614.</strong>
+
+<strong>Também podemos agendar através deste e-mail, basta respondê-lo sinalizando a sua disponibilidade.</strong>  
+
+Um abraço,
+<strong>Equipe Rapimed</strong>
 `;
 
 // Questões baseadas EXATAMENTE no PDF dos Postos de Saúde
@@ -158,7 +174,8 @@ const QUESTOES: Questao[] = [
   // PILAR 2 - Protocolos de Atendimento Médico
   {
     id: 6,
-    titulo: "6. Existem protocolos médicos descritos para os principais fluxos dos postos de saúde?",
+   // titulo: "PILAR 2 - Protocolos de Atendimento Médico",
+    titulo: "1. Existem protocolos médicos descritos para os principais fluxos dos postos de saúde?",
     tipo: 'radio',
     pilar: 2,
     opcoes: {
@@ -172,7 +189,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 7,
-    titulo: "7. Os protocolos são atualizados com frequência?",
+    titulo: "2. Os protocolos são atualizados com frequência?",
     tipo: 'radio',
     pilar: 2,
     opcoes: {
@@ -188,7 +205,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 8,
-    titulo: "8. Os protocolos têm base científica reconhecida?",
+    titulo: "3. Os protocolos têm base científica reconhecida?",
     tipo: 'radio',
     pilar: 2,
     opcoes: {
@@ -202,7 +219,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 9,
-    titulo: "9. Existem indicadores monitorados e gerenciados sobre a adesão dos médicos aos protocolos?",
+    titulo: "4. Há adesão dos médicos aos protocolos?",
     tipo: 'radio',
     pilar: 2,
     opcoes: {
@@ -217,7 +234,8 @@ const QUESTOES: Questao[] = [
   // PILAR 3 - Educação Médica Continuada
   {
     id: 10,
-    titulo: "10. Existem treinamentos regulares (ex.: trimestrais) para a equipe médica dos postos?",
+   // titulo: "PILAR 3 - Educação Médica Continuada",
+    titulo: "1. Existem treinamentos regulares (ex.: trimestrais) para a equipe médica dos postos?",
     tipo: 'radio',
     pilar: 3,
     opcoes: {
@@ -231,7 +249,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 11,
-    titulo: "11. A capacitação da equipe está alinhada com os protocolos do Ministério da Saúde?",
+    titulo: "2. A capacitação da equipe está alinhada com os protocolos do Ministério da Saúde?",
     tipo: 'radio',
     pilar: 3,
     opcoes: {
@@ -245,7 +263,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 12,
-    titulo: "12. Existe programa ou ferramenta de educação médica continuada?",
+    titulo: "3. Existe programa ou ferramenta de educação médica continuada?",
     tipo: 'radio',
     pilar: 3,
     opcoes: {
@@ -259,7 +277,7 @@ const QUESTOES: Questao[] = [
   },
   {
     id: 13,
-    titulo: "13. Há dificuldade em engajar os médicos na melhoria dos indicadores monitorados pelo Ministério da Saúde?",
+    titulo: "4. Há dificuldade em engajar os médicos na melhoria dos indicadores monitorados pelo Ministério da Saúde?",
     tipo: 'radio',
     pilar: 3,
     opcoes: {
@@ -310,15 +328,15 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
 };
 
 const determinarNivel = (pontos: number) => {
-  if (pontos <= 8) return {
+  if (pontos <= 2.5) return {
     nivel: "Nível 1 - Reestruturação Urgente",
     descricao: "Os postos de saúde necessitam de intervenção imediata para garantir o funcionamento básico dos serviços."
   };
-  if (pontos <= 16) return {
+  if (pontos <= 5) return {
     nivel: "Nível 2 - Melhorias Prioritárias", 
     descricao: "Existem deficiências importantes que comprometem a qualidade dos serviços médicos."
   };
-  if (pontos <= 20) return {
+  if (pontos <= 7.5) return {
     nivel: "Nível 3 - Fortalecimento Necessário",
     descricao: "A estrutura básica funciona, mas há oportunidades significativas de melhoria."
   };
@@ -336,7 +354,8 @@ export function AvaliacaoAtencaoBasica() {
     estado: '',
     cargo: '',
     telefone: '',
-    respostas: {}
+    respostas: {},
+    outros: {}
   });
 
   const [resultado, setResultado] = useState<{
@@ -423,8 +442,11 @@ export function AvaliacaoAtencaoBasica() {
   const enviarWebhook = async (dados: FormData, resultado: any, pontuacaoPilares: any, pilarMenor: any) => {
     const webhookUrl = 'https://n8n.dashvision.com.br/webhook/melhorias-hospitais';
     
+    const logoUrl = "https://drive.google.com/uc?export=view&id=1SqLnVdjDD6QPCJ0iFfbB61fF4rLHl9xu";
+    
     // Substituir variáveis no template
     const emailPersonalizado = EMAIL_TEMPLATE
+      .replace(/%logoUrl/g, logoUrl)
       .replace(/%nome/g, dados.nome)
       .replace(/%municipio/g, dados.municipio)
       .replace(/%regiao/g, '')
@@ -436,44 +458,33 @@ export function AvaliacaoAtencaoBasica() {
       .replace(/%pontos_pilar3/g, pontuacaoPilares[3].toString())
       .replace(/%pilar_menor/g, pilarMenor.nome)
       .replace(/%nota_menor/g, pilarMenor.pontos.toString())
+      .replace(/%resultadoNivel/g, resultado.nivel.toString())
+      .replace(/%resultadoPontos/g, resultado.pontuacaoTotal.toString())
       .replace(/%pdfRecomendado/g, pilarMenor.pdf);
     
     const pdfUrl = `${window.location.protocol}//${window.location.host}/assets/${pilarMenor.pdf}`;
     
     const emailContent = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-  <h2 style="color: #2563eb;">Nova Avaliação de Atenção Básica recebida</h2>
-  
-  <div style="margin: 20px 0; padding: 15px; background-color: #f8fafc; border-radius: 8px;">
+   
+  <div style="margin: 8px 0; padding: 15px; background-color: #f8fafc; border-radius: 8px; line-height: 1.2;">
     <h3 style="color: #1e40af;">Dados do Participante:</h3>
     <p><strong>Nome:</strong> ${dados.nome}</p>
     <p><strong>Email:</strong> ${dados.email}</p>
+    <p><strong>Cargo Atual:</strong> ${dados.cargo}</p>
     <p><strong>Município:</strong> ${dados.municipio}</p>
     <p><strong>Estado:</strong> ${dados.estado}</p>
-    <p><strong>Cargo:</strong> ${dados.cargo}</p>
     <p><strong>Telefone:</strong> ${dados.telefone}</p>
-    <p><strong>Tipo:</strong> ${TIPO_FORMULARIO}</p>
   </div>
 
-  <div style="margin: 20px 0; padding: 15px; background-color: #f0f9ff; border-radius: 8px;">
-    <h3 style="color: #1e40af;">Resultado da Avaliação:</h3>
-    <p><strong>Pontuação Total:</strong> ${resultado.pontuacaoTotal} pontos</p>
-    <p><strong>Nível:</strong> ${resultado.nivel}</p>
-    <p><strong>Pontuação por Pilar:</strong></p>
-    <ul>
-      <li>Serviços Médicos: ${pontuacaoPilares[1]} pontos</li>
-      <li>Protocolos de Atendimento: ${pontuacaoPilares[2]} pontos</li>
-      <li>Educação Médica Continuada: ${pontuacaoPilares[3]} pontos</li>
-    </ul>
-    <p><strong>Área de maior necessidade:</strong> ${pilarMenor.nome} (${pilarMenor.pontos} pontos)</p>
-    <p><strong>PDF recomendado:</strong> ${pilarMenor.pdf}</p>
-    <p style="margin-top: 10px;">${resultado.descricao}</p>
-  </div>
-
-  <div style="margin: 20px 0; padding: 20px; background-color: #f0f7ff; border-radius: 8px;">
-    <h3 style="color: #1e40af;">Mensagem Personalizada:</h3>
+  <div style="margin: 8px 0; padding: 15px; background-color: #f0f7ff; border-radius: 8px;">
     <div style="white-space: pre-line;">${emailPersonalizado}</div>
   </div>
+
+  <!-- Logo no final -->
+<div style="text-align: left; margin-top: 20px;">
+  <img src="${logoUrl}" alt="Logo" style="max-width: 200px; height: auto;">
+</div>
 
   <p style="color: #64748b; margin-top: 20px;">
     Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
@@ -489,11 +500,19 @@ export function AvaliacaoAtencaoBasica() {
             const resposta = dados.respostas[chaveResposta];
             return `${questao.id}.${index + 1}-${resposta || 'undefined'}`;
           }).join(' ') || '';
-          return subRespostas;
+          
+          // Adicionar campo "outros" se existir
+          const outros = dados.outros[questao.id.toString()];
+          const outrosTexto = outros ? ` | Outros: ${outros}` : '';
+          
+          return subRespostas + outrosTexto;
         } else if (questao.tipo === 'checkbox') {
           // Para checkbox, formatar como array
           const respostas = dados.respostas[questao.id.toString()] as string[] || [];
-          return `${questao.id}-[${respostas.join(',')}]`;
+          const outros = dados.outros[questao.id.toString()];
+          const outrosTexto = outros ? ` | Outros: ${outros}` : '';
+          
+          return `${questao.id}-[${respostas.join(',')}]${outrosTexto}`;
         } else {
           // Para questões simples, manter formato original
           return `${questao.id}-${dados.respostas[questao.id] || 'undefined'}`;
@@ -502,7 +521,7 @@ export function AvaliacaoAtencaoBasica() {
       .join(' ');
 
     // Função para obter resposta e pontos de uma questão
-    const obterResposta = (questaoId: number, itemIndex?: number) => {
+    const obterResposta = (questaoId: number, itemIndex?: number | string) => {
       const questao = QUESTOES.find(q => q.id === questaoId);
       if (!questao) return { resposta: '', pontos: 0 };
       
@@ -549,58 +568,84 @@ export function AvaliacaoAtencaoBasica() {
         uf: dados.estado, // Usar estado como UF
         dataHora: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
         
-        // Questões 1-13 (seguindo o padrão do cabeçalho)
-        coberturaProgramaSaudeFamilia: obterResposta(1).resposta,
+        // PILAR 1 - Questões 1-5 (seguindo o padrão do cabeçalho)
+        nivelSatisfacaoServicosMedicosClinicoGeral: obterResposta(1).resposta,
         pontosQ1: obterResposta(1).pontos,
         
-        existemProtocolosAssistenciaisPadronizados: obterResposta(2).resposta,
+        nivelSatisfacaoServicosMedicosEspecialistas: obterResposta(2).resposta,
         pontosQ2: obterResposta(2).pontos,
         
-        frequenciaAtualizacaoProtocolos: obterResposta(3, 0).resposta || obterResposta(3).resposta,
-        pontosQ3: obterResposta(3, 0).pontos || obterResposta(3).pontos,
+        // Questão 3 - dropdown_multiplo (4 itens)
+        furoOuAtrasoNasConsultas: obterResposta(3, 0).resposta,
+        pontosQ31: obterResposta(3, 0).pontos,
+        dificuldadeEmEncontrarMedicoDisponivel: obterResposta(3, 1).resposta,
+        pontosQ32: obterResposta(3, 1).pontos,
+        maoDeObraDesqualificada: obterResposta(3, 2).resposta,
+        pontosQ33: obterResposta(3, 2).pontos,
+        comunicacaoIneficienteEntreMedicoEPrefeitura: obterResposta(3, 3).resposta,
+        pontosQ34: obterResposta(3, 3).pontos,
+        outrosProblemasAtendimento: obterResposta(3, 'outros').resposta,
+        pontosQ35: obterResposta(3, 'outros').pontos,
         
-        indicadoresDeMonitoramento: obterResposta(4, 0).resposta || obterResposta(4).resposta,
-        pontosQ4: obterResposta(4, 0).pontos || obterResposta(4).pontos,
+        // Questão 4 - dropdown_multiplo (4 itens)
+        demoraNoAtendimento: obterResposta(4, 0).resposta,
+        pontosQ41: obterResposta(4, 0).pontos,
+        atendimentoPoucoHumanizado: obterResposta(4, 1).resposta,
+        pontosQ42: obterResposta(4, 1).pontos,
+        faltaDeExplicacaoClaraSobreDiagnosticoOuTratamento: obterResposta(4, 2).resposta,
+        pontosQ43: obterResposta(4, 2).pontos,
+        errosNoAtendimento: obterResposta(4, 3).resposta,
+        pontosQ44: obterResposta(4, 3).pontos,
+        outrosDoresPacientes: obterResposta(4, 'outros').resposta,
+        pontosQ45: obterResposta(4, 'outros').pontos,
         
-        qualidadeDoSaneamentoBasico: obterResposta(5).resposta,
+        // Questão 5 - checkbox (não pontua)
+        servicosDesejados: obterResposta(5).resposta,
         pontosQ5: obterResposta(5).pontos,
         
-        percentualCoberturaProgramaAgentesComunitarios: obterResposta(6).resposta,
+        // Campos "Outros" das questões 3, 4 e 5 (descrição textual)
+        outrosProblemasAtendimentoTexto: dados.outros['3'] || '',
+        outrosDoresPacientesTexto: dados.outros['4'] || '',
+        outrosServicosDesejadosTexto: dados.outros['5'] || '',
+        
+        // PILAR 2 - Questões 6-9
+        existemProtocolosMedicosDescritosParaOsPrincipaisFluxosDosPostosDeSaude: obterResposta(6).resposta,
         pontosQ6: obterResposta(6).pontos,
         
-        satisfacaoFuncionariosComTreinamentos: obterResposta(7).resposta,
+        osProtocolosSaoAtualizadosComFrequencia: obterResposta(7).resposta,
         pontosQ7: obterResposta(7).pontos,
         
-        frequenciaTreinamentosEquipesSaude: obterResposta(8).resposta,
+        osProtocolosTemBaseCientificaReconhecida: obterResposta(8).resposta,
         pontosQ8: obterResposta(8).pontos,
         
-        percentualCoberturaProgramaNutricao: obterResposta(9).resposta,
+        haAdesaoDosMedicosAosProtocolos: obterResposta(9).resposta,
         pontosQ9: obterResposta(9).pontos,
         
-        percentualCoberturaProgramaVacinacao: obterResposta(10).resposta,
+        // PILAR 3 - Questões 10-13
+        existemTreinamentosRegularesTrimestraisParaAEquipeMedicaDosPostos: obterResposta(10).resposta,
         pontosQ10: obterResposta(10).pontos,
         
-        qualidadeTelemedicinaTelemedicina: obterResposta(11).resposta,
+        aCapacitacaoDaEquipeEstaAlinhadaComOsProtocolosDoMinisterioDaSaude: obterResposta(11).resposta,
         pontosQ11: obterResposta(11).pontos,
         
-        percentualCoberturaProgramaSaudeMental: obterResposta(12).resposta,
+        existeProgramaOuFerramentaDeEducacaoMedicaContinuada: obterResposta(12).resposta,
         pontosQ12: obterResposta(12).pontos,
         
-        existeProgramaEducacaoMedicaContinuada: obterResposta(13).resposta,
+        haDificuldadeEmEngajarOsMedicosNaMelhoriaDosIndicadoresMonitoradosPeloMinisterioDaSaude: obterResposta(13).resposta,
         pontosQ13: obterResposta(13).pontos,
         
         // Resultados finais
-  pilar1ServicosMedicos: pontuacaoPilares[1],
-  pilar2ProtocolosDeAtendimento: pontuacaoPilares[2],
-  pilar3EducacaoMedicaContinuada: pontuacaoPilares[3],
-  pontuacaoGeral: resultado.pontuacaoTotal,
-  nivel: resultado.nivel,
-  recomendacao: resultado.descricao,
-  pdfRecomendado: pilarMenor.pdf,
-  tipo_formulario: TIPO_FORMULARIO,
-  pilar_menor: pilarMenor.nome,
-  nota_menor: pilarMenor.pontos,
-  stringValidacao: resultado.stringValidacao
+        pilar1ServicosMedicos: pontuacaoPilares[1],
+        pilar2ProtocolosDeAtendimento: pontuacaoPilares[2],
+        pilar3EducacaoMedicaContinuada: pontuacaoPilares[3],
+        pontuacaoGeral: resultado.pontuacaoTotal,
+        nivel: resultado.nivel,
+        recomendacao: resultado.descricao,
+        pdfRecomendado: pilarMenor.pdf,
+        tipo_formulario: TIPO_FORMULARIO,
+        pilar_menor: pilarMenor.nome,
+        nota_menor: pilarMenor.pontos,
+        stringValidacao: resultado.stringValidacao
       },
       
       // Campos extras fora do subgrupo dados (não vão para planilha)
@@ -665,11 +710,18 @@ export function AvaliacaoAtencaoBasica() {
       return;
     }
 
-    // Validar questões
+    // Validar questões (excluir questão 5 que não pontua)
     const questoesSemResposta = QUESTOES.filter(questao => {
+      // Pular validação para questão 5 (checkbox que não pontua)
+      if (questao.pilar === 0) return false;
+      
       if (questao.tipo === 'dropdown_multiplo') {
         // Para questões múltiplas, verificar se todos os itens foram respondidos
-        return questao.itens.some((_, index) => !formData.respostas[`${questao.id}_${index}`]);
+        // Incluir validação para campo "outros" se preenchido
+        const temOutros = formData.outros[questao.id.toString()] && formData.outros[questao.id.toString()].trim() !== '';
+        const outrosSemDropdown = temOutros && !formData.respostas[`${questao.id}_outros`];
+        
+        return questao.itens.some((_, index) => !formData.respostas[`${questao.id}_${index}`]) || outrosSemDropdown;
       } else if (questao.tipo === 'checkbox') {
         // Para checkbox, verificar se pelo menos uma opção foi selecionada
         const respostas = formData.respostas[questao.id.toString()] as string[] || [];
@@ -715,7 +767,8 @@ export function AvaliacaoAtencaoBasica() {
       estado: '',
       cargo: '',
       telefone: '',
-      respostas: {}
+      respostas: {},
+      outros: {}
     });
     setResultado(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -768,51 +821,16 @@ export function AvaliacaoAtencaoBasica() {
     }
   };
 
-  // Função para preencher dados de teste
-  const preencherDadosTeste = () => {
-    const dadosTeste = {
-      nome: 'Dr. Ana Paula Silva',
-      email: 'jlianeiva@gmail.com',
-      municipio: 'Rio de Janeiro',
-      estado: 'RJ', 
-      cargo: 'Coordenadora dos Postos de Saúde',
-      telefone: '(21) 99123-4567',
-      respostas: {
-        // PILAR 1 - Serviços Médicos
-        '1': '1',    // Satisfação clínico geral - Parcialmente satisfeito
-        '2': '0',    // Satisfação especialistas - Insatisfeito
-        
-        // Questão 3 - dropdown_multiplo (4 itens)
-        '3_0': '1',  // Furo ou atraso nas consultas - Frequentemente
-        '3_1': '0',  // Dificuldade encontrar médico - Crítico e recorrente
-        '3_2': '2',  // Mão de obra desqualificada - Raramente
-        '3_3': '1',  // Comunicação ineficiente - Frequentemente
-        
-        // Questão 4 - dropdown_multiplo (4 itens)
-        '4_0': '1',  // Demora no atendimento - Frequentemente
-        '4_1': '2',  // Atendimento pouco humanizado - Raramente
-        '4_2': '0',  // Falta de explicação clara - Crítico e recorrente
-        '4_3': '3',  // Erros no atendimento - Não ocorre
-        
-        // Questão 5 - checkbox (não pontua)
-        '5': ['ortopedia', 'pediatria', 'pronto_atendimento'],
-        
-        // PILAR 2 - Protocolos de Atendimento Médico
-        '6': '2',    // Existem protocolos descritos - Sim
-        '7': '1',    // Protocolos atualizados - Parcialmente
-        '8': '0',    // Base científica - Não
-        '9': '0',    // Indicadores monitorados - Não
-        
-        // PILAR 3 - Educação Médica Continuada
-        '10': '0',   // Treinamentos regulares - Não
-        '11': '2',   // Alinhado com Ministério - Sim
-        '12': '0',   // Programa educação continuada - Não
-        '13': '0'    // Dificuldade engajar médicos - Sim, há grande dificuldade
+  const handleOutrosChange = (questaoId: number, valor: string) => {
+    setFormData(prev => ({
+      ...prev,
+      outros: {
+        ...prev.outros,
+        [questaoId.toString()]: valor
       }
-    };
-    
-    setFormData(dadosTeste);
+    }));
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
@@ -833,7 +851,7 @@ export function AvaliacaoAtencaoBasica() {
             {/* Lado Direito - Formulário de Dados */}
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-gray-800 mb-6">
-                Diagnóstico Rapimed -  Hospitalar
+                Diagnóstico Rapimed - Atenção Básica
               </h1>
 
               <div className="space-y-6">
@@ -1030,6 +1048,40 @@ export function AvaliacaoAtencaoBasica() {
                               </select>
                             </div>
                           ))}
+                          {/* Campo "Outros" para questões 3 e 4 */}
+                          {(questao.id === 3 || questao.id === 4) && (
+                            <div className="bg-white p-3 rounded border">
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-gray-700">• Outros:</span>
+                                <input
+                                  type="text"
+                                  placeholder="Descreva outros problemas/dores..."
+                                  value={formData.outros[questao.id.toString()] || ''}
+                                  onChange={(e) => handleOutrosChange(questao.id, e.target.value)}
+                                  className="flex-1 px-3 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                />
+                                <select
+                                  name={`questao-${questao.id}_outros`}
+                                  value={formData.respostas[`${questao.id}_outros`] || ''}
+                                  onChange={(e) => setFormData(prev => ({
+                                    ...prev,
+                                    respostas: {
+                                      ...prev.respostas,
+                                      [`${questao.id}_outros`]: e.target.value
+                                    }
+                                  }))}
+                                  className="px-3 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm min-w-[200px]"
+                                >
+                                  <option value="">Escolha uma opção...</option>
+                                  {Object.entries(questao.opcoes).map(([valor, texto]) => (
+                                    <option key={valor} value={valor}>
+                                      {texto}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ) : questao.tipo === 'checkbox' ? (
                         <div className="space-y-2">
@@ -1046,6 +1098,31 @@ export function AvaliacaoAtencaoBasica() {
                               <span className="text-gray-700 leading-relaxed">{texto}</span>
                             </label>
                           ))}
+                          {/* Campo "Outros" para questão 5 */}
+                          {questao.id === 5 && (
+                            <div className="bg-white p-3 rounded border mt-3">
+                              <div className="flex items-center gap-3">
+                                <label className="flex items-center space-x-2 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    name={`questao_${questao.id}_outros`}
+                                    value="outros"
+                                    checked={((formData.respostas[questao.id.toString()] as string[]) || []).includes('outros')}
+                                    onChange={() => handleResposta(questao.id, 'outros')}
+                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                  />
+                                  <span className="text-gray-700">• Outros:</span>
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder="Descreva outros serviços desejados..."
+                                  value={formData.outros[questao.id.toString()] || ''}
+                                  onChange={(e) => handleOutrosChange(questao.id, e.target.value)}
+                                  className="flex-1 px-3 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ) : null}
                     </div>
@@ -1074,6 +1151,29 @@ export function AvaliacaoAtencaoBasica() {
                           <span className="text-gray-700 leading-relaxed">{texto}</span>
                         </label>
                       ))}
+                      
+                      {/* Campo "Outros" para questão 5 - na mesma seção */}
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center space-x-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name={`questao_${questao.id}_outros`}
+                            value="outros"
+                            checked={((formData.respostas[questao.id.toString()] as string[]) || []).includes('outros')}
+                            onChange={() => handleResposta(questao.id, 'outros')}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <span className="text-gray-700">• Outros:</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Descreva outros serviços desejados..."
+                          value={formData.outros[questao.id.toString()] || ''}
+                          onChange={(e) => handleOutrosChange(questao.id, e.target.value)}
+                          disabled={!((formData.respostas[questao.id.toString()] as string[]) || []).includes('outros')}
+                          className="flex-1 px-3 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
