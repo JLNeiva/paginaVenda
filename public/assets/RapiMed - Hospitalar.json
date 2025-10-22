@@ -19,7 +19,7 @@
     },
     {
       "parameters": {
-        "sendTo": "={{ $node[\"Webhook\"].json.body.dados.email }}",
+        "sendTo": "={{ $node[\"Webhook\"].json.body.dados.email }},rafael.rapimed@gmail.com",
         "subject": "Devolutiva Diagnóstico Rapimed — Hospitalar",
         "message": "={{ $node[\"Webhook\"].json.body.emailContent }}",
         "options": {
@@ -777,7 +777,7 @@
     },
     {
       "parameters": {
-        "sendTo": "={{ $node[\"Webhook\"].json.body.dados.email }}",
+        "sendTo": "={{ $node[\"Webhook\"].json.body.dados.email }},rafael.rapimed@gmail.com",
         "subject": "Devolutiva Diagnóstico Rapimed — Hospitalar",
         "message": "={{ $node[\"Webhook\"].json.body.emailContent }}",
         "options": {
@@ -1520,7 +1520,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "0ba08794-5d37-492b-af7d-26094d43c571",
+  "versionId": "a1495a45-11fa-41ee-b89b-97eb2548b4be",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "acfb1185843ef670b959635903182bb0d6c33b2fb52ffff41086e3c7cfe2300f"
