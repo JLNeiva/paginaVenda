@@ -552,6 +552,14 @@ export function AvaliacaoAtencaoBasica() {
         respostaTexto = respostaValor as string || '';
       }
       
+      // Para campos "outros" das questões 3 e 4, incluir o texto do usuário
+      if (itemIndex === 'outros' && (questaoId === 3 || questaoId === 4)) {
+        const textoUsuario = dados.outros[questaoId.toString()] || '';
+        if (textoUsuario.trim() !== '') {
+          respostaTexto = `${textoUsuario} (${respostaTexto})`;
+        }
+      }
+      
       return { resposta: respostaTexto, pontos };
     };
 
