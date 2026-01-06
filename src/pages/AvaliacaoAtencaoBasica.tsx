@@ -305,9 +305,9 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
   for (const pilar of PRIORIDADE_PILARES) {
     if (pilaresValidos[pilar] === menorNota) {
       const pdfNames = {
-        1: "Devolutiva_Serviços Médicos 2.pdf",
-        2: "Devolutiva_Protocolos Médicos 2.pdf", 
-        3: "Devolutiva_Educação Continuada 2.pdf"
+        1: "Devolutiva_Serviços_Médicos_2.pdf",
+        2: "Devolutiva_Protocolos_Médicos_2.pdf", 
+        3: "Devolutiva_Educação_Continuada_2.pdf"
       };
       
       return {
@@ -323,7 +323,7 @@ const determinarPilarMenorNota = (pontuacaoPilares: { [key: number]: number }) =
     pilar: 1,
     nome: NOMES_PILARES[0],
     pontos: menorNota,
-    pdf: "Devolutiva_Serviços Médicos 2.pdf"
+    pdf: "Devolutiva_Serviços_Médicos_2.pdf"
   };
 };
 
